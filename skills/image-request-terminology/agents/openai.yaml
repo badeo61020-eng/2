@@ -1,0 +1,4 @@
+interface:
+  display_name: "Image Request Terminology"
+  short_description: "Japanese prompt wording for image requests"
+  default_prompt: "Use this skill to translate vague Japanese image requests into practical prompt language."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generic Home Kitchen Recompose"
+  short_description: "Neutral recomposition for home and kitchen products."
+  default_prompt: "Use this skill to create or refine a neutral home or kitchen product image prompt."

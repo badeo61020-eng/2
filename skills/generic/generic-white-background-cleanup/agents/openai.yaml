@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generic White Background Cleanup"
+  short_description: "Neutral cleanup rules for white-background EC product imagery."
+  default_prompt: "Use this skill to clean up or create a white-background EC product image for a non-branded item."

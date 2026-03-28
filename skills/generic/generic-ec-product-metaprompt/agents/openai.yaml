@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generic EC Product Metaprompt"
+  short_description: "Neutral prompt framework for non-branded EC product imagery."
+  default_prompt: "Use this skill to create or refine a neutral EC product image prompt for a non-branded item."

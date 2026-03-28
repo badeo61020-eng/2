@@ -1,0 +1,5955 @@
+// ======================================================================
+// MQ会計システム 完全版 v5.0（CSV加工ツール統合版）
+// 最終更新: 2025-12-05
+// 機能: CSV加工ツール + MQ会計システム（データ統合・分析・書式設定）
+// ======================================================================
+
+// ======================================================================
+// 1. CSV加工ツール - 設定
+// ======================================================================
+
+const CSV_CONFIG = {
+  // 行削除ルール（40条件）※修正: 実際の条件数に合わせる
+  ROW_DELETION_RULES: [
+    { column: 13, condition: 'isEmpty' },
+    { column: 13, condition: 'equals', value: 0 },
+    { column: 13, condition: 'equals', value: "0" },
+    { column: 1, condition: 'equals', value: 'B0FXTXR2HG' },
+    { column: 1, condition: 'equals', value: 'B0FXTWY87Y' },
+    { column: 1, condition: 'equals', value: 'B0GHF2TDPZ' },
+    { column: 1, condition: 'equals', value: 'B0FWCDJYD2' },
+    { column: 1, condition: 'equals', value: 'B0FGXBF1Q9' },
+    { column: 1, condition: 'equals', value: 'B0FF56P7ST' },
+    { column: 1, condition: 'equals', value: 'B0FF59MXGB' },
+    { column: 1, condition: 'equals', value: 'B0FF574DRJ' },
+    { column: 1, condition: 'equals', value: 'B0FF579N63' },
+    { column: 1, condition: 'equals', value: 'B0FBFR8RLR' },
+    { column: 1, condition: 'equals', value: 'B0FBFR298F' },
+    { column: 1, condition: 'equals', value: 'B0FBG9LLTP' },
+    { column: 1, condition: 'equals', value: 'B0FBFMNT25' },
+    { column: 1, condition: 'equals', value: 'B0FBFMQ5XN' },
+    { column: 1, condition: 'equals', value: 'B0FBFFTP2L' },
+    { column: 1, condition: 'equals', value: 'B0FBG2718D' },
+    { column: 1, condition: 'equals', value: 'B0F9NXJXK2' },
+    { column: 1, condition: 'equals', value: 'B0F9B2H5KW' },
+    { column: 1, condition: 'equals', value: 'B0F88FQ3DY' },
+    { column: 1, condition: 'equals', value: 'B0F88F7T2L' },
+    { column: 1, condition: 'equals', value: 'B0F2S2VPDP' },
+    { column: 1, condition: 'equals', value: 'B0F1YQNQZ9' },
+    { column: 1, condition: 'equals', value: 'B0F1YNGFQP' },
+    { column: 1, condition: 'equals', value: 'B0DYDM63FB' },
+    { column: 1, condition: 'equals', value: 'B0DYDN4S5S' },
+    { column: 1, condition: 'equals', value: 'B0DYDNZ4N8' },
+    { column: 1, condition: 'equals', value: 'B0DXQCNMGH' },
+    { column: 1, condition: 'equals', value: 'B0DXQD5DMD' },
+    { column: 1, condition: 'equals', value: 'B0DXQGC5GQ' },
+    { column: 1, condition: 'equals', value: 'B0DXQFQV6T' },
+    { column: 1, condition: 'equals', value: 'B0DTP791CX' },
+    { column: 1, condition: 'equals', value: 'B0DTPHBQKZ' },
+    { column: 1, condition: 'equals', value: 'B0DTP9YP6H' },
+    { column: 1, condition: 'equals', value: 'B0DST2XB43' },
+    { column: 1, condition: 'equals', value: 'B0DSSJT9WW' },
+    { column: 1, condition: 'equals', value: 'B0DSSLGKNJ' },
+    { column: 1, condition: 'equals', value: 'B0DST3QXG3' },
+    { column: 1, condition: 'equals', value: 'B0DST42WP6' },
+    { column: 1, condition: 'equals', value: 'B0DSFM5G8N' },
+    { column: 1, condition: 'equals', value: 'B0DSFQYQMS' },
+    { column: 1, condition: 'equals', value: 'B0DSFQR4LN' },
+    { column: 1, condition: 'equals', value: 'B0DSFQQ44C' },
+    { column: 1, condition: 'equals', value: 'B0DQVG424W' },
+    { column: 1, condition: 'equals', value: 'B0DQVJ3YDL' },
+    { column: 1, condition: 'equals', value: 'B0DPDLJC12' },
+    { column: 1, condition: 'equals', value: 'B0DPDMH2SB' },
+    { column: 1, condition: 'equals', value: 'B0DMVHV7FG' },
+    { column: 1, condition: 'equals', value: 'B0DMVHVY3B' },
+    { column: 1, condition: 'equals', value: 'B0DM8H1TGX' },
+    { column: 1, condition: 'equals', value: 'B0DM2CSVH9' },
+    { column: 1, condition: 'equals', value: 'B0DM2FG1M3' },
+    { column: 1, condition: 'equals', value: 'B0DM2HYPZF' },
+    { column: 1, condition: 'equals', value: 'B0DM2DP93L' },
+    { column: 1, condition: 'equals', value: 'B0DM2H7HZB' },
+    { column: 1, condition: 'equals', value: 'B0DM2DZLT6' },
+    { column: 1, condition: 'equals', value: 'B0DL43LMSP' },
+    { column: 1, condition: 'equals', value: 'B0DL43LRJ9' },
+    { column: 1, condition: 'equals', value: 'B0DJR9VWR5' },
+    { column: 1, condition: 'equals', value: 'B0DJRBN59Y' },
+    { column: 1, condition: 'equals', value: 'B0D9T88ZNZ' },
+    { column: 1, condition: 'equals', value: 'B0D44WKCRP' },
+    { column: 1, condition: 'equals', value: 'B0D35TVY4T' },
+    { column: 1, condition: 'equals', value: 'B0D35SY75V' },
+    { column: 1, condition: 'equals', value: 'B0D35T6844' },
+    { column: 1, condition: 'equals', value: 'B0D35VGKNL' },
+    { column: 1, condition: 'equals', value: 'B0D35SVT1W' },
+    { column: 1, condition: 'equals', value: 'B0D35SXLZX' },
+    { column: 1, condition: 'equals', value: 'B0D35V83TK' },
+    { column: 1, condition: 'equals', value: 'B0D35S42JW' },
+    { column: 1, condition: 'equals', value: 'B0D35SWJ7P' },
+    { column: 1, condition: 'equals', value: 'B0D35T57RT' },
+    { column: 1, condition: 'equals', value: 'B0D14Y98YT' },
+    { column: 1, condition: 'equals', value: 'B0D14XGS6V' },
+    { column: 1, condition: 'equals', value: 'B0DZTRMJHC' },
+    { column: 1, condition: 'equals', value: 'B0CZKS883Y' },
+    { column: 1, condition: 'equals', value: 'B0CZKGZJLJ' },
+    { column: 1, condition: 'equals', value: 'B0CZKZ91KT' },
+    { column: 1, condition: 'equals', value: 'B0CZL8C28T' },
+    { column: 1, condition: 'equals', value: 'B0CY5KF7LN' },
+    { column: 1, condition: 'equals', value: 'B0CY5JQTGX' },
+    { column: 1, condition: 'equals', value: 'B0CY5HSRPX' },
+    { column: 1, condition: 'equals', value: 'B0CWR3P593' },
+    { column: 1, condition: 'equals', value: 'B0CV7CVKPN' },
+    { column: 1, condition: 'equals', value: 'B0CSNRWDLM' },
+    { column: 1, condition: 'equals', value: 'B0CKW81Q7G' },
+    { column: 1, condition: 'equals', value: 'B0C953P3CF' },
+    { column: 1, condition: 'equals', value: 'B0C951PS59' },
+    { column: 1, condition: 'equals', value: 'B0C951YTZ2' },
+    { column: 1, condition: 'equals', value: 'B0C9523153' },
+    { column: 1, condition: 'equals', value: 'B0C8224KJT' },
+    { column: 1, condition: 'equals', value: 'B0C823MJ1Q' },
+    { column: 1, condition: 'equals', value: 'B0C81Z4T62' },
+    { column: 1, condition: 'equals', value: 'B0C6HY65Z6' },
+    { column: 1, condition: 'equals', value: 'B0C6HZT5XP' },
+    { column: 1, condition: 'equals', value: 'B0C6J2G1JG' },
+    { column: 1, condition: 'equals', value: 'B0C6J1X89S' },
+    { column: 1, condition: 'equals', value: 'B0C6J12L8S' },
+    { column: 1, condition: 'equals', value: 'B0C94YCFBW' },
+    { column: 1, condition: 'equals', value: 'B0C4YSBWZ7' },
+    { column: 1, condition: 'equals', value: 'B0C4YR42PB' },
+    { column: 1, condition: 'equals', value: 'B0C4YV37HJ' },
+    { column: 1, condition: 'equals', value: 'B0C4YQSNK5' },
+    { column: 1, condition: 'equals', value: 'B0C4YVP9TY' },
+    { column: 1, condition: 'equals', value: 'B0C4YSS4VY' },
+    { column: 1, condition: 'equals', value: 'B0C4YRWN89' },
+    { column: 1, condition: 'equals', value: 'B0C3MBSG5M' },
+    { column: 1, condition: 'equals', value: 'B0C3M8CHMQ' },
+    { column: 1, condition: 'equals', value: 'B0C3M8WH6L' },
+    { column: 1, condition: 'equals', value: 'B0C6KPCSQQ' },
+    { column: 1, condition: 'equals', value: 'B0C18W9RG1' },
+    { column: 1, condition: 'equals', value: 'B0C18X84BS' },
+    { column: 1, condition: 'equals', value: 'B0C18WWK1P' },
+    { column: 1, condition: 'equals', value: 'B0C18TZ79G' },
+    { column: 1, condition: 'equals', value: 'B0C18Y8Z3P' },
+    { column: 1, condition: 'equals', value: 'B0C18XBPBR' },
+    { column: 1, condition: 'equals', value: 'B0G5NNSLRZ' },
+    { column: 1, condition: 'equals', value: 'B0G57ZM6TG' }
+  ],
+  
+  // 列削除ルール（17列）
+  COLUMN_DELETION_RULES: [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 18, 19, 20],
+  
+  // テキスト置換ルール（10条件）※修正: 実際は10条件
+  TEXT_REPLACEMENT_RULES: [
+    { column: 1, searchValue: 'B0FKT32BF5', replaceValue: 'eim-01-ph-02' },
+    { column: 1, searchValue: 'B0DST76NNY', replaceValue: 'eim-01-ph-01' },
+    { column: 1, searchValue: 'B0G3P2S1WK', replaceValue: 'eim-01-ph-03' },
+    { column: 1, searchValue: 'B0G1MS6QB6', replaceValue: 'eim-01-ph-04' },
+    { column: 1, searchValue: 'B0CCF4GW7W', replaceValue: 'hk-22-007-1-black' },
+    { column: 1, searchValue: 'B0CCF6F8HN', replaceValue: 'hk-22-007-2-white' },
+    { column: 1, searchValue: 'B0C2VRCCH1', replaceValue: 'hk-22-015' },
+    { column: 1, searchValue: 'B0CTGBWDL6', replaceValue: 'hk-23-005' },
+    { column: 1, searchValue: 'B0CPYBY5HH', replaceValue: 'hk-23-018' },
+    { column: 1, searchValue: 'B0D7S4BT99', replaceValue: 'hk-23-034' }
+  ]
+};
+
+// ======================================================================
+// 2. MQ会計システム - 設定
+// ======================================================================
+
+const MQ_CONFIG = {
+  SPREADSHEET_ID: '1ceQoH8uy9ovhp20_k_8z6d2cAHfVWpkrRDJ67Vt1YqY',
+  
+  SHEETS: {
+    SYSTEM_MANAGE: 'システム管理',
+    NEXTENGINE_SALES: 'NextEngine売上シート',
+    AMAZON_SALES: 'Amazon売上シート',
+    INTEGRATED_SALES: '統合売上データ',
+    MQ_ANALYSIS: 'MQ分析',
+    DAILY_SETTLEMENT: '日次決算',
+    MONTHLY_ANALYSIS: '月次累積分析',
+    MONTHLY_BREAKEVEN: '月次損益分岐点',
+    MONTHLY_SUMMARY: '月次サマリー',
+    ANNUAL_MQ_ANALYSIS: '年度累積MQ分析',
+    ANNUAL_BREAKEVEN: '年度損益分岐点',
+    PRODUCT_MQ_ANALYSIS: '商品別MQ分析',
+    PRODUCT_MONTHLY_MQ_ANALYSIS: '商品別月次MQ分析',
+    PRODUCT_MASTER: '商品マスター',
+    MONTHLY_FIXED_COST: '月別固定費',
+    INVENTORY_DATA: '在庫データ',
+    INVENTORY_INPUT: '在庫データ入力',  // ★新規追加
+    INVENTORY_CONSOLIDATED: '統合在庫データ',  // ★新規追加
+    WEEKLY_INVENTORY_TURNOVER: '週次在庫回転率',
+    MONTHLY_INVENTORY_TURNOVER: '月次在庫回転率'
+  },
+  
+  DEFAULT_FIXED_COST: 2824467,
+  FISCAL_YEAR_START_MONTH: 11
+};
+
+// ======================================================================
+// 3. カスタムメニュー
+// ======================================================================
+
+function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('統合ツール')
+    .addSubMenu(ui.createMenu('MQ会計システム')
+      .addItem('増分処理実行', 'runMQSystemWithIncrementalProcessing')
+      .addItem('集計シート再計算', 'recalculateAnalysisOnly')
+      .addItem('固定費確定後の再計算', 'recalculateAfterFixedCostUpdateWithConfirm')
+      .addItem('システムリセット', 'resetMQSystem'))
+      .addSubMenu(ui.createMenu('在庫回転率分析')        // ← 追加
+      .addItem('在庫データ初期化', 'initializeInventoryDataSheet')  // 既存
+      .addItem('在庫データ入力シート初期化', 'initializeInventoryInputSheet')  // ★追加
+      .addItem('在庫統合実行', 'consolidateInventory')  // ★追加
+      .addItem('週次在庫回転率計算', 'calculateWeeklyInventoryTurnover')
+      .addItem('月次在庫回転率計算', 'calculateMonthlyInventoryTurnover')
+      .addItem('在庫データ初期化', 'initializeInventoryDataSheet'))
+    .addSubMenu(ui.createMenu('在庫金額分析')  // ★新規追加
+      .addItem('月次在庫金額計算', 'calculateMonthlyInventoryAmount')  // ★新規追加
+      .addItem('在庫金額詳細分析', 'analyzeMonthlyInventoryDetail'))  // ★新規追加
+    .addSubMenu(ui.createMenu('CSV加工ツール')
+      .addItem('CSV加工実行', 'processCSVData'))
+    .addToUi();
+}
+
+// ======================================================================
+// 4. CSV加工ツール - 実行関数
+// ======================================================================
+
+function processCurrentSheet() {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // トースト通知で開始を表示
+  ss.toast('CSV加工を開始します...', '処理開始', 3);
+  
+  const data = sheet.getDataRange().getValues();
+  
+  Logger.log('📊 処理開始: ' + sheet.getName());
+  Logger.log('📊 元データ: ' + data.length + '行');
+  
+  // 1. 行削除
+  let filteredData = data.filter((row, index) => {
+    if (index === 0) return true;
+    
+    for (const rule of CSV_CONFIG.ROW_DELETION_RULES) {
+      const cellValue = row[rule.column];
+      
+      if (rule.condition === 'isEmpty' && (cellValue === '' || cellValue === null || cellValue === undefined)) {
+        return false;
+      }
+      if (rule.condition === 'equals' && cellValue == rule.value) {
+        return false;
+      }
+    }
+    return true;
+  });
+  
+  Logger.log('📊 行削除後: ' + filteredData.length + '行');
+  
+  // 2. テキスト置換
+  filteredData = filteredData.map(row => {
+    CSV_CONFIG.TEXT_REPLACEMENT_RULES.forEach(rule => {
+      if (row[rule.column] === rule.searchValue) {
+        row[rule.column] = rule.replaceValue;
+      }
+    });
+    return row;
+  });
+  
+  Logger.log('📊 テキスト置換完了');
+  
+  // 3. 列削除
+  const columnsToDelete = CSV_CONFIG.COLUMN_DELETION_RULES.sort((a, b) => b - a);
+  filteredData = filteredData.map(row => {
+    const newRow = [...row];
+    columnsToDelete.forEach(colIndex => {
+      newRow.splice(colIndex, 1);
+    });
+    return newRow;
+  });
+  
+  Logger.log('📊 列削除後: ' + (filteredData[0] ? filteredData[0].length : 0) + '列');
+  
+  // 4. シート更新
+  sheet.clearContents();
+  SpreadsheetApp.flush();
+  
+  if (filteredData.length > 0 && filteredData[0].length > 0) {
+    sheet.getRange(1, 1, filteredData.length, filteredData[0].length).setValues(filteredData);
+    SpreadsheetApp.flush();
+  }
+  
+  const deletedRows = data.length - filteredData.length;
+  const deletedCols = (data[0] ? data[0].length : 0) - (filteredData[0] ? filteredData[0].length : 0);
+  
+  Logger.log('✅ 処理完了');
+  Logger.log('📊 最終結果: ' + filteredData.length + '行 × ' + (filteredData[0] ? filteredData[0].length : 0) + '列');
+  
+  // トースト通知で完了を表示（自動的に消える）
+  ss.toast(
+    '削除: ' + deletedRows + '行 / ' + deletedCols + '列　残存: ' + filteredData.length + '行',
+    '✅ CSV加工完了',
+    10
+  );
+}
+
+/**
+ * CSV加工ツール - メニューから呼び出されるエントリーポイント
+ * 実際の処理は processCurrentSheet() に委譲
+ */
+function processCSVData() {
+  return processCurrentSheet();
+}
+
+function diagnoseCurrentSheet() {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const data = sheet.getDataRange().getValues();
+  
+  Logger.log('📊 シート診断: ' + sheet.getName());
+  Logger.log('総行数: ' + data.length);
+  Logger.log('総列数: ' + (data[0] ? data[0].length : 0));
+  
+  SpreadsheetApp.getUi().alert('📊 診断結果\n\nシート名: ' + sheet.getName() + '\n総行数: ' + data.length + '\n総列数: ' + (data[0] ? data[0].length : 0));
+}
+
+function diagnoseColumn13() {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const data = sheet.getDataRange().getValues();
+  
+  let emptyCount = 0;
+  let zeroCount = 0;
+  let validCount = 0;
+  
+  for (let i = 1; i < data.length; i++) {
+    const cellValue = data[i][13];
+    if (cellValue === '' || cellValue === null || cellValue === undefined) {
+      emptyCount++;
+    } else if (cellValue == 0) {
+      zeroCount++;
+    } else {
+      validCount++;
+    }
+  }
+  
+  Logger.log('📊 N列（13列目）診断');
+  Logger.log('空白セル: ' + emptyCount);
+  Logger.log('0のセル: ' + zeroCount);
+  Logger.log('有効データ: ' + validCount);
+  
+  SpreadsheetApp.getUi().alert('📊 N列診断\n\n空白: ' + emptyCount + '\n0: ' + zeroCount + '\n有効: ' + validCount);
+}
+
+function previewDeletionRules() {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const data = sheet.getDataRange().getValues();
+  
+  let deleteCount = 0;
+  
+  for (let i = 1; i < data.length; i++) {
+    for (const rule of CSV_CONFIG.ROW_DELETION_RULES) {
+      const cellValue = data[i][rule.column];
+      
+      if (rule.condition === 'isEmpty' && (cellValue === '' || cellValue === null || cellValue === undefined)) {
+        deleteCount++;
+        break;
+      }
+      if (rule.condition === 'equals' && cellValue == rule.value) {
+        deleteCount++;
+        break;
+      }
+    }
+  }
+  
+  Logger.log('👁️ 削除プレビュー');
+  Logger.log('削除対象行数: ' + deleteCount);
+  Logger.log('残存行数: ' + (data.length - 1 - deleteCount));
+  
+  SpreadsheetApp.getUi().alert('👁️ 削除プレビュー\n\n削除: ' + deleteCount + '行\n残存: ' + (data.length - 1 - deleteCount) + '行');
+}
+
+function showConfig() {
+  Logger.log('⚙️ CSV_CONFIG設定');
+  Logger.log('行削除ルール: ' + CSV_CONFIG.ROW_DELETION_RULES.length + '件');
+  Logger.log('列削除ルール: ' + CSV_CONFIG.COLUMN_DELETION_RULES.length + '件');
+  Logger.log('置換ルール: ' + CSV_CONFIG.TEXT_REPLACEMENT_RULES.length + '件');
+  
+  SpreadsheetApp.getUi().alert('⚙️ 設定情報\n\n行削除: ' + CSV_CONFIG.ROW_DELETION_RULES.length + '件\n列削除: ' + CSV_CONFIG.COLUMN_DELETION_RULES.length + '件\n置換: ' + CSV_CONFIG.TEXT_REPLACEMENT_RULES.length + '件');
+}
+
+// ======================================================================
+// 5. MQ会計システム - システム管理
+// ======================================================================
+
+function initializeSystemManage() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(); // 修正: openById → getActiveSpreadsheet
+  let sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.SYSTEM_MANAGE);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(MQ_CONFIG.SHEETS.SYSTEM_MANAGE);
+    sheet.getRange('A1').setValue('データソース');
+    sheet.getRange('B1').setValue('シート名');
+    sheet.getRange('C1').setValue('処理済み行数');
+    
+    sheet.getRange('A2').setValue('NextEngine');
+    sheet.getRange('B2').setValue(MQ_CONFIG.SHEETS.NEXTENGINE_SALES);
+    sheet.getRange('C2').setValue(1);
+    
+    sheet.getRange('A3').setValue('Amazon');
+    sheet.getRange('B3').setValue(MQ_CONFIG.SHEETS.AMAZON_SALES);
+    sheet.getRange('C3').setValue(1);
+    
+    Logger.log('✅ システム管理シート作成完了');
+  } else {
+    const nextEngineProcessed = sheet.getRange('C2').getValue() || 1;
+    const amazonProcessed = sheet.getRange('C3').getValue() || 1;
+    Logger.log(`📊 既存システム管理シート確認: NextEngine=${nextEngineProcessed}, Amazon=${amazonProcessed}`);
+  }
+  
+  return sheet;
+}
+
+function forceResetSystemManage() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet(); // 修正: openById → getActiveSpreadsheet
+  const existingSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.SYSTEM_MANAGE);
+  
+  if (existingSheet) {
+    ss.deleteSheet(existingSheet);
+    Logger.log('🗑️ 既存のシステム管理シートを削除');
+  }
+  
+  const sheet = ss.insertSheet(MQ_CONFIG.SHEETS.SYSTEM_MANAGE);
+  sheet.getRange('A1').setValue('データソース');
+  sheet.getRange('B1').setValue('シート名');
+  sheet.getRange('C1').setValue('処理済み行数');
+  
+  sheet.getRange('A2').setValue('NextEngine');
+  sheet.getRange('B2').setValue(MQ_CONFIG.SHEETS.NEXTENGINE_SALES);
+  sheet.getRange('C2').setValue(1);
+  
+  sheet.getRange('A3').setValue('Amazon');
+  sheet.getRange('B3').setValue(MQ_CONFIG.SHEETS.AMAZON_SALES);
+  sheet.getRange('C3').setValue(1);
+  
+  Logger.log('✅ システム管理シートを強制リセット完了（処理済み行数=1）');
+}
+
+function completeSystemReset() {
+  Logger.log('🔄 完全システムリセット開始...');
+  const ss = SpreadsheetApp.getActiveSpreadsheet(); // 修正: openById → getActiveSpreadsheet
+  
+  const sheetsToDelete = [
+    MQ_CONFIG.SHEETS.INTEGRATED_SALES,
+    MQ_CONFIG.SHEETS.MQ_ANALYSIS,
+    MQ_CONFIG.SHEETS.DAILY_SETTLEMENT,
+    MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS,
+    MQ_CONFIG.SHEETS.MONTHLY_BREAKEVEN,
+    MQ_CONFIG.SHEETS.MONTHLY_SUMMARY,
+    MQ_CONFIG.SHEETS.ANNUAL_MQ_ANALYSIS,
+    MQ_CONFIG.SHEETS.ANNUAL_BREAKEVEN,
+    MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS,
+    MQ_CONFIG.SHEETS.PRODUCT_MONTHLY_MQ_ANALYSIS,
+    MQ_CONFIG.SHEETS.SYSTEM_MANAGE
+  ];
+  
+  let deletedCount = 0;
+  for (const sheetName of sheetsToDelete) {
+    const sheet = ss.getSheetByName(sheetName);
+    if (sheet) {
+      ss.deleteSheet(sheet);
+      deletedCount++;
+      Logger.log(`  🗑️ ${sheetName} 削除完了`);
+    }
+  }
+  
+  Logger.log(`✅ ${deletedCount}個のシートを削除`);
+  
+  forceResetSystemManage();
+  
+  Logger.log('✅ 完全システムリセット完了');
+  Logger.log('📌 次に runMQSystemWithIncrementalProcessing() を実行してください');
+  
+  SpreadsheetApp.getUi().alert('✅ 完全リセット完了\n\nすべてのデータをクリアしました。\n次に「増分処理実行」を実行してください。');
+}
+
+// ======================================================================
+// 6. MQ会計システム - ユーティリティ関数
+// ======================================================================
+
+function getFiscalYear(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  
+  if (month >= MQ_CONFIG.FISCAL_YEAR_START_MONTH) {
+    return `FY${year}`;
+  } else {
+    return `FY${year - 1}`;
+  }
+}
+
+// ============================================
+// 7. データ統合（増分処理・商品マスター対応版）
+// ============================================
+
+/**
+ * NextEngine売上データの増分処理（真・増分版）
+ * @param {number} lastRow  システム管理シートに保存している前回最終行（データ行番号）
+ * @return {number}         今回処理後の最終行（データ行番号）
+ */
+function integrateNextEngineIncremental(lastRow) {
+  console.log('=== NextEngine増分処理開始 ===');
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 1) 商品マスター読込（V(原価)）
+  const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  if (!pmSheet) throw new Error('商品マスターシートが見つかりません');
+
+  const pmData = pmSheet.getDataRange().getValues();
+  const pmHeaders = pmData[0];
+  const colPmCode = pmHeaders.indexOf('商品コード');
+  const colPmCost = pmHeaders.indexOf('V(原価)');
+  if (colPmCode === -1 || colPmCost === -1) {
+    throw new Error(`商品マスターの列構成が不正です: 商品コード=${colPmCode}, V(原価)=${colPmCost}`);
+  }
+
+  const productMaster = {};
+  for (let i = 1; i < pmData.length; i++) {
+    const code = String(pmData[i][colPmCode]).trim();
+    const cost = Number(pmData[i][colPmCost]);
+    if (code && !isNaN(cost)) productMaster[code] = cost;
+  }
+  console.log(`✅ 商品マスター: ${Object.keys(productMaster).length}商品`);
+
+  // 2) NextEngine売上読込
+  const neSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.NEXTENGINE_SALES);
+  if (!neSheet) throw new Error('NextEngine売上シートが見つかりません');
+
+  const neData = neSheet.getDataRange().getValues();
+  const neHeaders = neData[0];
+
+  const colDate = neHeaders.indexOf('日付');
+  const colCode = neHeaders.indexOf('商品コード');
+  const colName = neHeaders.indexOf('商品名');
+  const colQuantity = neHeaders.indexOf('Q(販売数量)');
+  const colSales = neHeaders.indexOf('PQ(売上金額)');
+
+  if ([colDate, colCode, colName, colQuantity, colSales].some(i => i === -1)) {
+    throw new Error(`NextEngine売上シートの列構成が不正です: 日付=${colDate}, 商品コード=${colCode}, 商品名=${colName}, Q=${colQuantity}, PQ=${colSales}`);
+  }
+
+  const currentLastRow = neData.length - 1; // データ行数（ヘッダ除く）
+  console.log(`📊 NextEngine売上: ${currentLastRow}行 / 前回最終行=${lastRow}`);
+
+  // 増分が無い場合
+  if (currentLastRow <= lastRow) {
+    console.log('⚠️ NextEngine: 新規データなし');
+    return lastRow;
+  }
+
+  // 3) 統合売上データへ追記（重複排除込み）
+  const consolidatedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  if (!consolidatedSheet) throw new Error('統合売上データシートが見つかりません');
+
+  const seen = buildExistingIntegratedSalesKeySet_();
+  const rowsToAppend = [];
+
+  let generated = 0;
+  let skipped = 0;
+  let errorCount = 0;
+
+  // ★ここが増分：lastRow+1 から開始
+  for (let i = Math.max(1, lastRow + 1); i <= currentLastRow; i++) {
+    const row = neData[i];
+
+    const date = row[colDate];
+    const code = String(row[colCode]).trim();
+    const name = String(row[colName]).trim();
+    const quantity = Number(row[colQuantity]) || 0;
+    const sales = Number(row[colSales]) || 0;
+
+    // ヘッダ混入対策
+    if (code === '商品ｺｰﾄﾞ' || code === '商品コード') continue;
+    if (!code || !date) continue;
+
+    const cost = productMaster[code];
+    if (!cost) {
+      console.warn(`⚠️ 商品マスターに存在しません: ${code}`);
+      errorCount++;
+      continue;
+    }
+
+    const variableCost = quantity * cost;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const key = `${dateKey}|${code}|NextEngine|${quantity}|${sales}|${variableCost}`;
+
+    generated++;
+
+    if (seen.has(key)) {
+      skipped++;
+      continue;
+    }
+
+    seen.add(key);
+    rowsToAppend.push([
+      date,          // 日付
+      code,          // 商品コード
+      name,          // 商品名
+      quantity,      // Q
+      sales,         // P
+      variableCost,  // V
+      'NextEngine'   // データソース
+    ]);
+  }
+
+  Logger.log(`統合売上データ(NextEngine): 生成=${generated}, 追記=${rowsToAppend.length}, スキップ=${skipped}, 商品マスター未登録=${errorCount}`);
+
+  if (rowsToAppend.length > 0) {
+    const startRow = consolidatedSheet.getLastRow() + 1;
+    consolidatedSheet.getRange(startRow, 1, rowsToAppend.length, rowsToAppend[0].length).setValues(rowsToAppend);
+    console.log(`✅ 統合売上データ(NextEngine)に${rowsToAppend.length}行を追加`);
+  } else {
+    console.log(`✅ 統合売上データ(NextEngine) 追加なし（全件スキップ）`);
+  }
+
+  console.log('=== NextEngine増分処理完了 ===');
+  return currentLastRow; // ★これを systemSheet(C2) に保存する
+}
+
+/**
+ * Amazon売上データの増分処理（真・増分版）
+ * @param {number} lastRow  システム管理シートに保存している前回最終行（データ行番号）
+ * @return {number}         今回処理後の最終行（データ行番号）
+ */
+function integrateAmazonIncremental(lastRow) {
+  console.log('=== Amazon増分処理開始 ===');
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 1) 商品マスター読込（V(原価)）
+  const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  if (!pmSheet) throw new Error('商品マスターシートが見つかりません');
+
+  const pmData = pmSheet.getDataRange().getValues();
+  const pmHeaders = pmData[0];
+
+  const colPmCode = pmHeaders.indexOf('商品コード');
+  const colPmCost = pmHeaders.indexOf('V(原価)');
+  if (colPmCode === -1 || colPmCost === -1) {
+    throw new Error(`商品マスターの列構成が不正です: 商品コード=${colPmCode}, V(原価)=${colPmCost}`);
+  }
+
+  const productMaster = {};
+  for (let i = 1; i < pmData.length; i++) {
+    const code = String(pmData[i][colPmCode]).trim();
+    const cost = Number(pmData[i][colPmCost]);
+    if (code && !isNaN(cost)) productMaster[code] = cost;
+  }
+  console.log(`✅ 商品マスター: ${Object.keys(productMaster).length}商品`);
+
+  // 2) Amazon売上読込
+  const amazonSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.AMAZON_SALES);
+  if (!amazonSheet) throw new Error('Amazon売上シートが見つかりません');
+
+  const amazonData = amazonSheet.getDataRange().getValues();
+  const amazonHeaders = amazonData[0];
+
+  const colDate = amazonHeaders.indexOf('日付');
+  const colCode = amazonHeaders.indexOf('商品コード');
+  const colName = amazonHeaders.indexOf('商品名');
+  const colQuantity = amazonHeaders.indexOf('Q(販売数量)');
+  const colSales = amazonHeaders.indexOf('PQ(売上金額)');
+
+  if ([colDate, colCode, colName, colQuantity, colSales].some(i => i === -1)) {
+    throw new Error(`Amazon売上シートの列構成が不正です: 日付=${colDate}, 商品コード=${colCode}, 商品名=${colName}, Q=${colQuantity}, PQ=${colSales}`);
+  }
+
+  const currentLastRow = amazonData.length - 1;
+  console.log(`📊 Amazon売上: ${currentLastRow}行 / 前回最終行=${lastRow}`);
+
+  if (currentLastRow <= lastRow) {
+    console.log('⚠️ Amazon: 新規データなし');
+    return lastRow;
+  }
+
+  // 3) 統合売上データへ追記（重複排除込み）
+  const consolidatedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  if (!consolidatedSheet) throw new Error('統合売上データシートが見つかりません');
+
+  const seen = buildExistingIntegratedSalesKeySet_();
+  const rowsToAppend = [];
+
+  let generated = 0;
+  let skipped = 0;
+  let errorCount = 0;
+
+  // ★ここが増分：lastRow+1 から開始
+  for (let i = Math.max(1, lastRow + 1); i <= currentLastRow; i++) {
+    const row = amazonData[i];
+
+    const date = row[colDate];
+    const code = String(row[colCode]).trim();
+    const name = String(row[colName]).trim();
+    const quantity = Number(row[colQuantity]) || 0;
+    const sales = Number(row[colSales]) || 0;
+
+    if (!code || !date) continue;
+
+    const cost = productMaster[code];
+    if (!cost) {
+      console.warn(`⚠️ 商品マスターに存在しません: ${code}`);
+      errorCount++;
+      continue;
+    }
+
+    const variableCost = quantity * cost;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const key = `${dateKey}|${code}|Amazon|${quantity}|${sales}|${variableCost}`;
+
+    generated++;
+
+    if (seen.has(key)) {
+      skipped++;
+      continue;
+    }
+
+    seen.add(key);
+    rowsToAppend.push([
+      date,
+      code,
+      name,
+      quantity,
+      sales,
+      variableCost,
+      'Amazon'
+    ]);
+  }
+
+  Logger.log(`統合売上データ(Amazon): 生成=${generated}, 追記=${rowsToAppend.length}, スキップ=${skipped}, 商品マスター未登録=${errorCount}`);
+
+  if (rowsToAppend.length > 0) {
+    const targetRow = consolidatedSheet.getLastRow() + 1;
+    consolidatedSheet.getRange(targetRow, 1, rowsToAppend.length, rowsToAppend[0].length).setValues(rowsToAppend);
+    console.log(`✅ 統合売上データ(Amazon)に${rowsToAppend.length}行を追加`);
+  } else {
+    console.log(`✅ 統合売上データ(Amazon) 追加なし（全件スキップ）`);
+  }
+
+  console.log('=== Amazon増分処理完了 ===');
+  return currentLastRow; // ★これを systemSheet(C3) に保存する
+}
+
+
+/**
+ * 商品マスター読み込み（¥記号対応版）
+ */
+function loadProductMaster() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const masterSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  
+  if (!masterSheet) {
+    Logger.log('⚠️ 商品マスターシートが見つかりません');
+    return {};
+  }
+  
+  const data = masterSheet.getDataRange().getValues();
+  const productMap = {};
+  
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const sku = String(row[0] || '').trim();
+    if (!sku) continue;
+    
+    // 原価の¥記号を除去して数値化（列C: 2）
+    let unitCost = row[2];
+    if (typeof unitCost === 'string') {
+      unitCost = parseFloat(unitCost.replace(/[¥,]/g, '')) || 0;
+    } else {
+      unitCost = parseFloat(unitCost) || 0;
+    }
+    
+    // 定価の¥記号を除去（列D: 3）
+    let price = row[3];
+    if (typeof price === 'string') {
+      price = parseFloat(price.replace(/[¥,]/g, '')) || 0;
+    } else {
+      price = parseFloat(price) || 0;
+    }
+    
+    productMap[sku] = {
+      name: String(row[1] || '').trim(),
+      unitCost: unitCost,
+      price: price
+    };
+  }
+  
+  Logger.log(`✅ 商品マスター読込: ${Object.keys(productMap).length}件`);
+  return productMap;
+}
+
+// ======================================================================
+// 8. MQ会計システム - MQ分析（製品マスタ連携・軽量版）
+// ======================================================================
+
+function executeMQAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const integratedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  const productMasterSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS) || 
+                  ss.insertSheet(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  
+  if (!integratedSheet || !productMasterSheet) {
+    Logger.log('⚠️ 統合売上データまたは製品マスタが見つかりません');
+    return;
+  }
+  
+  // MQ分析シートをクリア
+  mqSheet.clear();
+  mqSheet.appendRow([
+    '日付', '年月', '商品コード', '商品名', 'Q(販売数量)', 
+    'P（売上金額）', 'V（変動費）', 'MQ', 'データソース'
+  ]);
+  
+  const integratedData = integratedSheet.getDataRange().getValues();
+  const productMasterData = productMasterSheet.getDataRange().getValues();
+  
+  Logger.log(`📊 統合売上データ: ${integratedData.length}行`);
+  Logger.log(`📦 製品マスタ: ${productMasterData.length}行`);
+  
+  const productMap = {};
+  for (let i = 1; i < productMasterData.length; i++) {
+    const sku = productMasterData[i][0];
+    productMap[sku] = {
+      name: productMasterData[i][1],
+      unitCost: parseFloat(String(productMasterData[i][2] || '0').replace(/[¥,]/g, '')) || 0,
+      unitPrice: parseFloat(String(productMasterData[i][3] || '0').replace(/[¥,]/g, '')) || 0
+    };
+  }
+  
+  Logger.log(`📦 製品マスタ読込: ${Object.keys(productMap).length}件`);
+  
+  // バッチ処理用の配列
+  const batchData = [];
+  let mqCount = 0;
+  let skippedCount = 0;
+  
+  // 統合売上データの列インデックス
+  const dateIdx = 0;       // 日付
+  const skuIdx = 1;        // 商品コード
+  const nameIdx = 2;       // 商品名
+  const qtyIdx = 3;        // Q(販売数量)
+  const salesIdx = 4;      // P(売上高)
+  const costIdx = 5;       // V(変動費)
+  const sourceIdx = 6;     // データソース
+  
+  for (let i = 1; i < integratedData.length; i++) {
+    const row = integratedData[i];
+    const date = row[dateIdx];
+    const sku = row[skuIdx];
+    const name = row[nameIdx];
+    const qty = row[qtyIdx] || 0;
+    const sales = row[salesIdx] || 0;
+    const variableCost = row[costIdx] || 0;
+    const source = row[sourceIdx];  // ← これが「NextEngine」または「Amazon」
+    
+    if (!date || !sku || qty === 0) {
+      skippedCount++;
+      continue;
+    }
+    
+    // MQ（限界利益）= P - V
+    const mq = sales - variableCost;
+    
+    // 年月を計算
+    const yearMonth = Utilities.formatDate(new Date(date), 'JST', 'yyyy/MM');
+    
+    batchData.push([
+      date,
+      yearMonth,
+      sku,
+      name,
+      qty,
+      sales,
+      variableCost,
+      mq,
+      source  // ← ここに「NextEngine」または「Amazon」が入る
+    ]);
+    mqCount++;
+    
+    // 500行ごとにバッチ書き込み
+    if (batchData.length >= 500) {
+      const lastRow = mqSheet.getLastRow();
+      mqSheet.getRange(lastRow + 1, 1, batchData.length, 9).setValues(batchData);
+      Logger.log(`  📝 MQ分析: ${batchData.length}行を書き込み中...（累計: ${mqCount}件）`);
+      batchData.length = 0;
+    }
+  }
+  
+  // 残りのデータを書き込み
+  if (batchData.length > 0) {
+    const lastRow = mqSheet.getLastRow();
+    mqSheet.getRange(lastRow + 1, 1, batchData.length, 9).setValues(batchData);
+    Logger.log(`  📝 MQ分析: ${batchData.length}行を書き込み完了`);
+  }
+  
+  Logger.log(`✅ MQ分析: ${mqCount}件のレコードを作成（スキップ: ${skippedCount}件）`);
+}
+
+
+// ======================================================================
+// 9. MQ会計システム - 各種集計関数（完全修正版）
+// ======================================================================
+
+function executeDailySettlement() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 集計元を「統合売上データ」に変更
+  const srcSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  const dailySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.DAILY_SETTLEMENT) ||
+                     ss.insertSheet(MQ_CONFIG.SHEETS.DAILY_SETTLEMENT);
+
+  if (!srcSheet) {
+    Logger.log('⚠️ 統合売上データシートが見つかりません: ' + MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+    return;
+  }
+
+  dailySheet.clear();
+  dailySheet.appendRow([
+    '会計年度', '年月', '日付', 'P（売上金額）', 'V（変動費）',
+    'Q（販売数量）', 'MQ', 'F（固定費）', 'G（利益）', 'データソース'
+  ]);
+
+  const values = srcSheet.getDataRange().getValues();
+  if (values.length <= 1) {
+    Logger.log('⚠️ 統合売上データに明細がありません');
+    return;
+  }
+
+  // 統合売上データの列（あなた提示から確定）
+  // 0:日付 1:商品コード 2:商品名 3:Q 4:P 5:V 6:データソース
+  const dateIdx = 0;
+  const qtyIdx  = 3;
+  const salesIdx = 4;
+  const costIdx = 5;
+  const sourceIdx = 6;
+
+  const fixedCostData = loadMonthlyFixedCost();
+
+  // dateKey(yyyy-MM-dd) 単位で集計
+  const dailyMap = {};
+  let validRows = 0;
+
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    const date = row[dateIdx];
+    if (!date) continue;
+
+    const dateObj = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(dateObj.getTime())) continue;
+
+    // 数値ガード（文字列や空欄でも壊れない）
+    const qty   = (typeof row[qtyIdx] === 'number') ? row[qtyIdx] : Number(row[qtyIdx]) || 0;
+    const sales = (typeof row[salesIdx] === 'number') ? row[salesIdx] : Number(row[salesIdx]) || 0;
+    const cost  = (typeof row[costIdx] === 'number') ? row[costIdx] : Number(row[costIdx]) || 0;
+    const source = row[sourceIdx] || '';
+
+    const dateKey = Utilities.formatDate(dateObj, 'JST', 'yyyy-MM-dd');
+    const yearMonth = Utilities.formatDate(dateObj, 'JST', 'yyyy/MM');
+    const fiscalYear = getFiscalYear(dateObj);
+
+    if (!dailyMap[dateKey]) {
+      dailyMap[dateKey] = {
+        fiscalYear,
+        yearMonth,
+        date: dateObj,
+        totalSales: 0,
+        totalCost: 0,
+        totalQty: 0,
+        sources: new Set()
+      };
+    }
+
+    dailyMap[dateKey].totalSales += sales;
+    dailyMap[dateKey].totalCost += cost;
+    dailyMap[dateKey].totalQty += qty;
+    if (source) dailyMap[dateKey].sources.add(source);
+
+    validRows++;
+  }
+
+  // 出力
+  const outputData = [];
+  const keys = Object.keys(dailyMap).sort(); // yyyy-MM-dd で自然昇順
+
+  for (const k of keys) {
+    const data = dailyMap[k];
+
+    const yearMonth = data.yearMonth; // yyyy/MM
+    const fixedCost = fixedCostData[yearMonth] || MQ_CONFIG.DEFAULT_FIXED_COST;
+    const daysInMonth = new Date(data.date.getFullYear(), data.date.getMonth() + 1, 0).getDate();
+    const dailyFixedCost = Math.round(fixedCost / daysInMonth);
+
+    const mq = data.totalSales - data.totalCost;      // MQは日次で P-V
+    const profit = mq - dailyFixedCost;
+
+    outputData.push([
+      data.fiscalYear,
+      yearMonth,
+      data.date,
+      data.totalSales,
+      data.totalCost,
+      data.totalQty,
+      mq,
+      dailyFixedCost,
+      profit,
+      Array.from(data.sources).join(', ')
+    ]);
+  }
+
+  if (outputData.length > 0) {
+    dailySheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
+  }
+
+  Logger.log(`✅ 日次決算（統合売上データ起点）: 明細${validRows}行 → ${outputData.length}日分に集計`);
+}
+
+function executeMonthlyAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  const dailySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.DAILY_SETTLEMENT);
+  const monthlySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS) ||
+                       ss.insertSheet(MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS);
+
+  if (!dailySheet) {
+    Logger.log('❌ 日次決算シートが見つかりません: ' + MQ_CONFIG.SHEETS.DAILY_SETTLEMENT);
+    return;
+  }
+
+  monthlySheet.clear();
+  monthlySheet.appendRow([
+    '会計年度', '年月', 'MQ（限界利益）', 'F（固定費）', 'G（利益）', 'P（売上高）'
+  ]);
+  
+  Logger.log('📋 月次分析シートをクリアして再生成開始...');
+
+  const dailyData = dailySheet.getDataRange().getValues();
+  const fixedCostData = loadMonthlyFixedCost();
+  
+  Logger.log(`📊 固定費マスタから${Object.keys(fixedCostData).length}件の月データを取得`);
+  Logger.log(`📅 日次決算シートから${dailyData.length - 1}行のデータを取得`);
+
+  // 日次決算ヘッダー（確定）
+  // 0:会計年度 1:年月 2:日付 3:P 4:V 5:Q 6:MQ 7:F 8:G 9:データソース
+  const fyIdx = 0;
+  const ymIdx = 1;
+  const pIdx  = 3;
+  const mqIdx = 6;
+
+  const monthlyMap = {};
+
+ for (let i = 1; i < dailyData.length; i++) {
+  const row = dailyData[i];
+
+  const fy = row[fyIdx];
+  const ymRaw = row[ymIdx];
+  if (!fy || !ymRaw) continue;
+
+  // ✅ 年月キーを必ず yyyy/MM に正規化（固定費マスタ keys と一致させる）
+  let ym; // yyyy/MM 文字列
+  if (ymRaw instanceof Date) {
+    ym = Utilities.formatDate(ymRaw, 'JST', 'yyyy/MM');
+  } else {
+    const s = String(ymRaw).trim();
+    // "2025/11/01" -> "2025/11" / "2025-11-01" -> "2025/11" も吸収
+    ym = s.match(/^\d{4}\/\d{2}$/)
+      ? s
+      : s.substring(0, 7).replace(/-/g, '/');
+  }
+
+  // ✅ 数値ガード（#NUM!・空欄・文字列混入でも壊れない）
+  const pRaw = row[pIdx];
+  const mqRaw = row[mqIdx];
+  const p  = (typeof pRaw  === 'number') ? pRaw  : (Number(pRaw)  || 0);
+  const mq = (typeof mqRaw === 'number') ? mqRaw : (Number(mqRaw) || 0);
+
+  const key = `${fy}_${ym}`;
+
+  if (!monthlyMap[key]) {
+    monthlyMap[key] = {
+      fiscalYear: fy,
+      yearMonth: ym,     // ✅ ここが yyyy/MM で固定されるので固定費参照が安定
+      totalMQ: 0,
+      totalSales: 0
+    };
+  }
+
+  monthlyMap[key].totalMQ += mq;
+  monthlyMap[key].totalSales += p;
+}
+
+  const outputData = [];
+
+for (const key in monthlyMap) {
+  const data = monthlyMap[key];
+
+  // ✅ 固定費のヒット状況を確認（ここが本丸）
+  const masterFixedCost = fixedCostData[data.yearMonth];
+  const fixedCost = (typeof masterFixedCost === 'number')
+    ? masterFixedCost
+    : MQ_CONFIG.DEFAULT_FIXED_COST;
+
+  // ✅ 1行ログ：固定費がマスタから取れているかを可視化
+  Logger.log(
+    `DBG MonthlyFixedCost: key=${key}, yearMonth=${data.yearMonth}, ` +
+    `master=${masterFixedCost}, used=${fixedCost}` +
+    (typeof masterFixedCost === 'number' ? '' : ' (DEFAULT_USED)')
+  );
+
+  const profit = data.totalMQ - fixedCost;
+  
+  // ✅ 追加ログ：固定費と利益の値を確認
+  Logger.log(`  → MQ=${data.totalMQ}, F=${fixedCost}, Profit=${profit}, P=${data.totalSales}`);
+
+  outputData.push([
+    data.fiscalYear,
+    data.yearMonth,
+    data.totalMQ,
+    fixedCost,
+    profit,
+    data.totalSales
+  ]);
+}
+
+  // 年月でソート
+  outputData.sort((a, b) => {
+    const dateA = new Date(a[1] + '/01');
+    const dateB = new Date(b[1] + '/01');
+    return dateA - dateB;
+  });
+
+  Logger.log(`✅ 月次集計完了: ${outputData.length}件のデータを生成`);
+  
+  // データ内容を確認（先頭3行）
+  for (let i = 0; i < Math.min(3, outputData.length); i++) {
+    const row = outputData[i];
+    Logger.log(`  行${i+1}: FY=${row[0]}, YM=${row[1]}, MQ=${row[2]}, F=${row[3]}, Profit=${row[4]}, P=${row[5]}`);
+  }
+
+  // まとめて書き込み（appendRow連打より安全・高速）
+  if (outputData.length > 0) {
+    Logger.log(`📝 月次分析シート(${monthlySheet.getName()})に${outputData.length}行を書き込み中...`);
+    monthlySheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
+    Logger.log(`✏️ 書き込み完了`);
+  } else {
+    Logger.log('⚠️ 出力データが0件のため、シートへの書き込みをスキップしました');
+  }
+
+  Logger.log(`✅ 月次累積分析: ${outputData.length}件出力（集計元=日次決算）`);
+}
+
+function executeMonthlyBreakevenAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const monthlySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS);
+  const breakevenSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_BREAKEVEN) || 
+                         ss.insertSheet(MQ_CONFIG.SHEETS.MONTHLY_BREAKEVEN);
+  
+  if (!monthlySheet) return;
+  
+  // ✅ 月次固定費マスタから最新の固定費を取得
+  const fixedCostData = loadMonthlyFixedCost();
+  
+  breakevenSheet.clear();
+  breakevenSheet.appendRow([
+    '会計年度', '年月', 'MQ率(%)', 'F（固定費）', '損益分岐点売上', 
+    '実績売上', '損益分岐点比率(%)', '安全余裕率(%)'
+  ]);
+  
+  const monthlyData = monthlySheet.getDataRange().getValues();
+  
+  for (let i = 1; i < monthlyData.length; i++) {
+    const row = monthlyData[i];
+    const fiscalYear = row[0];
+    const yearMonthValue = row[1];
+    const mq = row[2] || 0;
+    const actualSales = row[5] || 0;
+    
+    // 年月を文字列に統一
+    let yearMonth;
+    if (yearMonthValue instanceof Date) {
+      yearMonth = Utilities.formatDate(yearMonthValue, 'JST', 'yyyy/MM');
+    } else if (typeof yearMonthValue === 'string') {
+      yearMonth = yearMonthValue;
+    } else {
+      yearMonth = String(yearMonthValue);
+    }
+    
+    // ✅ 月次固定費マスタから最新の確定固定費を取得（仮固定費ではなく確定固定費を優先）
+    const masterFixedCost = fixedCostData[yearMonth];
+    const fixedCost = (typeof masterFixedCost === 'number')
+      ? masterFixedCost
+      : MQ_CONFIG.DEFAULT_FIXED_COST;
+    
+    // MQ率（0-1の範囲で保存）
+    const mqRate = actualSales > 0 ? mq / actualSales : 0;
+    
+    // 損益分岐点売上
+    const breakevenSales = mqRate > 0 ? fixedCost / mqRate : 0;
+    
+    // 損益分岐点比率（0-1の範囲で保存、書式設定で%表示）
+    const breakevenRatio = breakevenSales > 0 ? actualSales / breakevenSales : 0;
+    
+    // 安全余裕率（0-1の範囲で保存、書式設定で%表示）
+    const safetyMargin = actualSales > 0 ? (actualSales - breakevenSales) / actualSales : 0;
+    
+    breakevenSheet.appendRow([
+      fiscalYear,
+      yearMonth,
+      mqRate,
+      fixedCost,
+      breakevenSales,
+      actualSales,
+      breakevenRatio,
+      safetyMargin
+    ]);
+  }
+  
+  Logger.log(`✅ 月次損益分岐点分析: ${monthlyData.length - 1}件出力`);
+}
+
+function executeMonthlyMySummary() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const monthlySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS);
+  const summarySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_SUMMARY) || 
+                       ss.insertSheet(MQ_CONFIG.SHEETS.MONTHLY_SUMMARY);
+  
+  if (!monthlySheet) return;
+  
+  // ✅ 月次固定費マスタから最新の固定費を取得
+  const fixedCostData = loadMonthlyFixedCost();
+  
+  summarySheet.clear();
+  summarySheet.appendRow([
+    '会計年度', '年月', '売上高', '限界利益', '固定費', '利益', 
+    'MQ率(%)', '前月比売上(%)', '前月比利益(%)'
+  ]);
+  
+  const monthlyData = monthlySheet.getDataRange().getValues();
+  let prevSales = 0;
+  let prevProfit = 0;
+  
+  for (let i = 1; i < monthlyData.length; i++) {
+    const row = monthlyData[i];
+    const fiscalYear = row[0];
+    const yearMonthValue = row[1];
+    const mq = row[2] || 0;
+    const profit = row[4] || 0;
+    const sales = row[5] || 0;
+    
+    // 年月を文字列に統一
+    let yearMonth;
+    if (yearMonthValue instanceof Date) {
+      yearMonth = Utilities.formatDate(yearMonthValue, 'JST', 'yyyy/MM');
+    } else if (typeof yearMonthValue === 'string') {
+      yearMonth = yearMonthValue;
+    } else {
+      yearMonth = String(yearMonthValue);
+    }
+    
+    // ✅ 月次固定費マスタから最新の確定固定費を取得（仮固定費ではなく確定固定費を優先）
+    const masterFixedCost = fixedCostData[yearMonth];
+    const fixedCost = (typeof masterFixedCost === 'number')
+      ? masterFixedCost
+      : MQ_CONFIG.DEFAULT_FIXED_COST;
+    
+    const mqRate = sales > 0 ? (mq / sales) : 0;
+    const salesGrowth = prevSales > 0 ? ((sales - prevSales) / prevSales) : 0;
+    const profitGrowth = prevProfit !== 0 ? ((profit - prevProfit) / Math.abs(prevProfit)) : 0;
+    
+    summarySheet.appendRow([
+      fiscalYear,
+      yearMonth,
+      sales,
+      mq,
+      fixedCost,
+      profit,
+      mqRate,
+      salesGrowth,
+      profitGrowth
+    ]);
+    
+    prevSales = sales;
+    prevProfit = profit;
+  }
+  
+  Logger.log(`✅ 月次サマリー: ${monthlyData.length - 1}件出力`);
+}
+
+function executeAnnualMQAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  const annualSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.ANNUAL_MQ_ANALYSIS) || 
+                      ss.insertSheet(MQ_CONFIG.SHEETS.ANNUAL_MQ_ANALYSIS);
+  
+  if (!mqSheet) return;
+  
+  annualSheet.clear();
+  annualSheet.appendRow([
+    '会計年度', 'P（売上高）', 'V（変動費）', 'MQ', 'Q（販売数量）'
+  ]);
+  
+  const mqData = mqSheet.getDataRange().getValues();
+  const annualMap = {};
+  
+  // 固定の列インデックスを使用
+  const dateIdx = 0;      // 日付
+  const qtyIdx = 4;       // Q(販売数量)
+  const salesIdx = 5;     // P(売上高)
+  const costIdx = 6;      // V(変動費)
+  const mqIdx = 7;        // MQ
+  
+  for (let i = 1; i < mqData.length; i++) {
+    const row = mqData[i];
+    const date = row[dateIdx];
+    const qty = row[qtyIdx] || 0;
+    const sales = row[salesIdx] || 0;
+    const cost = row[costIdx] || 0;
+    const mq = row[mqIdx] || 0;
+    
+    if (!date) continue;
+    
+    const dateObj = new Date(date);
+    const fiscalYear = getFiscalYear(dateObj);
+    
+    if (!annualMap[fiscalYear]) {
+      annualMap[fiscalYear] = {
+        totalSales: 0,
+        totalCost: 0,
+        totalMQ: 0,
+        totalQty: 0
+      };
+    }
+    
+    annualMap[fiscalYear].totalSales += sales;
+    annualMap[fiscalYear].totalCost += cost;
+    annualMap[fiscalYear].totalMQ += mq;
+    annualMap[fiscalYear].totalQty += qty;
+  }
+  
+  const outputData = [];
+  for (const fiscalYear in annualMap) {
+    const data = annualMap[fiscalYear];
+    outputData.push([
+      fiscalYear,
+      data.totalSales,
+      data.totalCost,
+      data.totalMQ,
+      data.totalQty
+    ]);
+  }
+  
+  outputData.sort((a, b) => a[0].localeCompare(b[0]));
+  
+  for (const row of outputData) {
+    annualSheet.appendRow(row);
+  }
+  
+  Logger.log(`✅ 年度累積MQ分析: ${outputData.length}件出力`);
+}
+
+function executeAnnualBreakevenAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const annualMQSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.ANNUAL_MQ_ANALYSIS);
+  const breakevenSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.ANNUAL_BREAKEVEN) || 
+                         ss.insertSheet(MQ_CONFIG.SHEETS.ANNUAL_BREAKEVEN);
+  
+  if (!annualMQSheet) return;
+  
+  breakevenSheet.clear();
+  breakevenSheet.appendRow([
+    '会計年度', 'MQ率(%)', 'F（固定費）', '損益分岐点売上', 
+    '実績売上', '損益分岐点比率(%)', '安全余裕率(%)'
+  ]);
+  
+  const annualData = annualMQSheet.getDataRange().getValues();
+  const fixedCostData = loadMonthlyFixedCost();
+  
+  for (let i = 1; i < annualData.length; i++) {
+    const row = annualData[i];
+    const fiscalYear = row[0];
+    const sales = row[1] || 0;
+    const mq = row[3] || 0;
+    
+    let totalFixedCost = 0;
+    for (const yearMonth in fixedCostData) {
+      const yearMonthDate = new Date(yearMonth + '/01');
+      const fy = getFiscalYear(yearMonthDate);
+      if (fy === fiscalYear) {
+        totalFixedCost += fixedCostData[yearMonth];
+      }
+    }
+    
+    // MQ率（0-1の範囲で保存）
+    const mqRate = sales > 0 ? mq / sales : 0;
+    
+    // 損益分岐点売上
+    const breakevenSales = mqRate > 0 ? totalFixedCost / mqRate : 0;
+    
+    // 損益分岐点比率（0-1の範囲で保存、書式設定で%表示）
+    const breakevenRatio = breakevenSales > 0 ? sales / breakevenSales : 0;
+    
+    // 安全余裕率（0-1の範囲で保存、書式設定で%表示）
+    const safetyMargin = sales > 0 ? (sales - breakevenSales) / sales : 0;
+    
+    breakevenSheet.appendRow([
+      fiscalYear,
+      mqRate,
+      totalFixedCost,
+      breakevenSales,
+      sales,
+      breakevenRatio,
+      safetyMargin
+    ]);
+  }
+  
+  Logger.log(`✅ 年度損益分岐点分析: ${annualData.length - 1}件出力`);
+}
+
+/**
+ * 商品別MQ分析の実行（売上高順ソート版）
+ */
+function executeProductMQAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  
+  // MQ分析シートが存在しない場合はスキップ
+  if (!mqSheet) {
+    Logger.log('⚠️ MQ分析シートが見つかりません。商品別MQ分析をスキップします。');
+    return;
+  }
+  
+  // 商品別MQ分析シートを取得または作成
+  let outputSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS);
+  if (!outputSheet) {
+    outputSheet = ss.insertSheet(MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS);
+    Logger.log('✅ 商品別MQ分析シートを新規作成');
+  }
+  
+  const mqData = mqSheet.getDataRange().getValues();
+  
+  // データが存在しない場合はスキップ
+  if (mqData.length <= 1) {
+    Logger.log('⚠️ MQ分析データが空です。商品別MQ分析をスキップします。');
+    return;
+  }
+  
+  const productMap = new Map();
+  
+  // 商品別にデータを集計（ヘッダー行をスキップ）
+  for (let i = 1; i < mqData.length; i++) {
+    const productCode = mqData[i][2]; // 商品コード
+    const productName = mqData[i][3]; // 商品名
+    const qty = parseFloat(mqData[i][4]) || 0; // Q
+    const sales = parseFloat(mqData[i][5]) || 0; // P
+    const cost = parseFloat(mqData[i][6]) || 0; // V
+    const mq = parseFloat(mqData[i][7]) || 0; // MQ
+    
+    if (!productCode) continue;
+    
+    if (!productMap.has(productCode)) {
+      productMap.set(productCode, {
+        productName: productName,
+        totalQty: 0,
+        totalSales: 0,
+        totalCost: 0,
+        totalMQ: 0
+      });
+    }
+    
+    const product = productMap.get(productCode);
+    product.totalQty += qty;
+    product.totalSales += sales;
+    product.totalCost += cost;
+    product.totalMQ += mq;
+  }
+  
+  // 結果配列の作成
+  const results = [];
+  
+  for (const [productCode, data] of productMap.entries()) {
+    // MQ率を正しく計算（小数で保持）
+    const mqRate = data.totalSales > 0 ? data.totalMQ / data.totalSales : 0;
+    
+    results.push({
+      productCode: productCode,
+      productName: data.productName,
+      totalQty: data.totalQty,
+      totalSales: data.totalSales,
+      totalCost: data.totalCost,
+      totalMQ: data.totalMQ,
+      mqRate: mqRate
+    });
+  }
+  
+  // 【重要】売上高でソート（降順）
+  results.sort((a, b) => b.totalSales - a.totalSales);
+  
+  // ランク付け（売上高順位に基づく）
+  const totalProducts = results.length;
+  results.forEach((item, index) => {
+    const percentile = (index + 1) / totalProducts;
+    if (percentile <= 0.2) item.rank = 'S';
+    else if (percentile <= 0.4) item.rank = 'A';
+    else if (percentile <= 0.6) item.rank = 'B';
+    else if (percentile <= 0.8) item.rank = 'C';
+    else item.rank = 'D';
+  });
+  
+  // シートへの出力
+  outputSheet.clear();
+  
+  // ヘッダー行
+  const headers = [
+    '商品コード',
+    '商品名',
+    'Q（販売数量）',
+    'P（売上高）',
+    'V（変動費）',
+    'MQ',
+    'MQ率(%)',
+    'ランク'
+  ];
+  
+  outputSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  
+  // データ行（MQ率を数値として出力）
+  if (results.length > 0) {
+    const outputData = results.map(item => [
+      item.productCode,
+      item.productName,
+      item.totalQty,
+      item.totalSales,
+      item.totalCost,
+      item.totalMQ,
+      item.mqRate,
+      item.rank
+    ]);
+    
+    outputSheet.getRange(2, 1, outputData.length, headers.length).setValues(outputData);
+    
+    // 数値列のフォーマット
+    const dataStartRow = 2;
+    
+    // Q, P, V, MQ列を数値フォーマット（カンマ区切り）
+    outputSheet.getRange(dataStartRow, 3, outputData.length, 4)
+      .setNumberFormat('#,##0');
+    
+    // MQ率列をパーセント表示（小数点2桁）
+    outputSheet.getRange(dataStartRow, 7, outputData.length, 1)
+      .setNumberFormat('0.00%');
+  }
+  
+  Logger.log(`✅ 商品別MQ分析完了: ${results.length}商品（売上高順）`);
+}
+
+
+// ======================================================================
+// 10. ユーティリティ関数
+// ======================================================================
+
+/**
+ * 月別固定費の読み込み（仮固定費・確定固定費対応版）
+ * 
+ * 優先順位:
+ * 1. 確定固定費（列C）に値がある → 確定固定費を使用
+ * 2. 確定固定費が空白 → 仮固定費（列B）を使用
+ * 3. 両方とも空白 → デフォルト値を使用
+ */
+function loadMonthlyFixedCost() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fixedCostSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_FIXED_COST);
+  
+  const fixedCostMap = {};
+  
+  if (fixedCostSheet) {
+    const data = fixedCostSheet.getDataRange().getValues();
+    let loadedMonths = 0;
+    
+    Logger.log('📊 月別固定費マスタ読込開始');
+    
+    for (let i = 1; i < data.length; i++) {
+      const yearMonth = data[i][0];    // 列A: 年月
+      const tentativeCost = data[i][1]; // 列B: 仮固定費
+      const confirmedCost = data[i][2]; // 列C: 確定固定費
+      
+      if (!yearMonth) continue;
+      
+      // 年月のフォーマット統一
+      let formattedYearMonth;
+      if (yearMonth instanceof Date) {
+        formattedYearMonth = Utilities.formatDate(yearMonth, 'JST', 'yyyy/MM');
+      } else if (typeof yearMonth === 'string') {
+        const parts = yearMonth.split('/');
+        if (parts.length === 2) {
+          formattedYearMonth = yearMonth;
+        } else {
+          try {
+            formattedYearMonth = Utilities.formatDate(new Date(yearMonth), 'JST', 'yyyy/MM');
+          } catch (e) {
+            Logger.log(`⚠️ 年月フォーマットエラー: ${yearMonth}`);
+            continue;
+          }
+        }
+      }
+      
+      if (!formattedYearMonth) continue;
+      
+      // 固定費の選択ロジック
+      let costToUse = 0;
+      let costType = '';
+      
+      // 確定固定費のチェック（空白、null、0ではない）
+      if (confirmedCost !== '' && confirmedCost !== null && confirmedCost !== undefined) {
+        const parsedConfirmed = parseFloat(confirmedCost);
+        if (!isNaN(parsedConfirmed) && parsedConfirmed > 0) {
+          costToUse = parsedConfirmed;
+          costType = '確定';
+        }
+      }
+      
+      // 確定固定費がない場合、仮固定費をチェック
+      if (costToUse === 0) {
+        if (tentativeCost !== '' && tentativeCost !== null && tentativeCost !== undefined) {
+          const parsedTentative = parseFloat(tentativeCost);
+          if (!isNaN(parsedTentative) && parsedTentative > 0) {
+            costToUse = parsedTentative;
+            costType = '仮';
+          }
+        }
+      }
+      
+      // 両方とも空白の場合はデフォルト値
+      if (costToUse === 0) {
+        costToUse = MQ_CONFIG.DEFAULT_FIXED_COST;
+        costType = 'デフォルト';
+      }
+      
+      fixedCostMap[formattedYearMonth] = costToUse;
+      loadedMonths++;
+      
+      Logger.log(`  ${formattedYearMonth}: ${costType}固定費 = ${costToUse.toLocaleString()}円`);
+    }
+    
+    Logger.log(`✅ 月次固定費マスタ読込完了: ${loadedMonths}ヶ月分`);
+  } else {
+    Logger.log('⚠️ 月次固定費マスタが見つかりません。デフォルト値を使用します。');
+  }
+  
+  return fixedCostMap;
+}
+
+// ============================================
+// 11. 書式設定関数（完全版・最終調整済み）
+// ============================================
+
+/**
+ * 月次累積分析シート書式設定
+ */
+function formatMonthlyAnalysis(sheet) {
+  try {
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    
+    sheet.setFrozenRows(1);
+    
+    // ヘッダー書式
+    const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
+    headerRange.setBackground('#4A90E2')
+              .setFontColor('#FFFFFF')
+              .setFontWeight('bold')
+              .setHorizontalAlignment('center');
+    
+    // 会計年度・年月（列A-B）: テキスト形式
+    sheet.getRange(2, 1, lastRow - 1, 2).setNumberFormat('@');
+    
+    // 金額列（列C-F）: カンマ区切り
+    sheet.getRange(2, 3, lastRow - 1, 4).setNumberFormat('#,##0');
+    
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    SpreadsheetApp.flush(); // 即座に反映
+    
+  } catch (e) {
+    Logger.log('⚠️ formatMonthlyAnalysis エラー: ' + e.message);
+  }
+}
+
+/**
+ * 月次損益分岐点シート書式設定
+ */
+function formatMonthlyBreakeven(sheet) {
+  try {
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    
+    sheet.setFrozenRows(1);
+    
+    // ヘッダー書式
+    const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
+    headerRange.setBackground('#E74C3C')
+              .setFontColor('#FFFFFF')
+              .setFontWeight('bold')
+              .setHorizontalAlignment('center');
+    
+    // 会計年度・年月: テキスト
+    sheet.getRange(2, 1, lastRow - 1, 2).setNumberFormat('@');
+    
+    // MQ率（列C）: パーセント
+    sheet.getRange(2, 3, lastRow - 1, 1).setNumberFormat('0.00%');
+    
+    // 固定費・損益分岐点売上・実績売上（列D-F）: カンマ区切り
+    sheet.getRange(2, 4, lastRow - 1, 3).setNumberFormat('#,##0');
+    
+    // 損益分岐点比率・安全余裕率（列G-H）: パーセント
+    sheet.getRange(2, 7, lastRow - 1, 2).setNumberFormat('0.00%');
+    
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    SpreadsheetApp.flush();
+    
+  } catch (e) {
+    Logger.log('⚠️ formatMonthlyBreakeven エラー: ' + e.message);
+  }
+}
+
+/**
+ * 月次サマリーシート書式設定
+ */
+function formatMonthlyMySummary(sheet) {
+  try {
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    
+    sheet.setFrozenRows(1);
+    
+    // ヘッダー書式
+    const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
+    headerRange.setBackground('#2ECC71')
+              .setFontColor('#FFFFFF')
+              .setFontWeight('bold')
+              .setHorizontalAlignment('center');
+    
+    // 会計年度・年月: テキスト
+    sheet.getRange(2, 1, lastRow - 1, 2).setNumberFormat('@');
+    
+    // 売上高・限界利益・固定費・利益（列C-F）: カンマ区切り
+    sheet.getRange(2, 3, lastRow - 1, 4).setNumberFormat('#,##0');
+    
+    // MQ率・前月比（列G-I）: パーセント
+    sheet.getRange(2, 7, lastRow - 1, 3).setNumberFormat('0.00%');
+    
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    SpreadsheetApp.flush();
+    
+  } catch (e) {
+    Logger.log('⚠️ formatMonthlyMySummary エラー: ' + e.message);
+  }
+}
+
+/**
+ * 年度損益分岐点シート書式設定
+ */
+function formatAnnualBreakeven(sheet) {
+  try {
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    
+    sheet.setFrozenRows(1);
+    
+    // ヘッダー書式
+    const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
+    headerRange.setBackground('#9B59B6')
+              .setFontColor('#FFFFFF')
+              .setFontWeight('bold')
+              .setHorizontalAlignment('center');
+    
+    // 会計年度: テキスト
+    sheet.getRange(2, 1, lastRow - 1, 1).setNumberFormat('@');
+    
+    // MQ率（列B）: パーセント
+    sheet.getRange(2, 2, lastRow - 1, 1).setNumberFormat('0.00%');
+    
+    // 固定費・損益分岐点売上・実績売上（列C-E）: カンマ区切り
+    sheet.getRange(2, 3, lastRow - 1, 3).setNumberFormat('#,##0');
+    
+    // 損益分岐点比率・安全余裕率（列F-G）: パーセント
+    sheet.getRange(2, 6, lastRow - 1, 2).setNumberFormat('0.00%');
+    
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    SpreadsheetApp.flush();
+    
+  } catch (e) {
+    Logger.log('⚠️ formatAnnualBreakeven エラー: ' + e.message);
+  }
+}
+
+/**
+ * Section 11: フォーマット関数
+ * 商品別MQ分析シートのフォーマット (修正版)
+ */
+function formatProductMQAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS);
+  
+  if (!sheet) return;
+  
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+  
+  // ヘッダー行のフォーマット
+  const headerRange = sheet.getRange(1, 1, 1, 8);
+  headerRange.setBackground('#FF9800')
+    .setFontColor('#FFFFFF')
+    .setFontWeight('bold')
+    .setHorizontalAlignment('center');
+  
+  // データ範囲のフォーマット
+  const dataRange = sheet.getRange(2, 1, lastRow - 1, 8);
+  
+  // 全体の基本フォーマット
+  dataRange.setVerticalAlignment('middle');
+  
+  // 列ごとの配置
+  sheet.getRange(2, 1, lastRow - 1, 2).setHorizontalAlignment('left');   // 商品コード、商品名
+  sheet.getRange(2, 3, lastRow - 1, 5).setHorizontalAlignment('right');  // Q, P, V, MQ
+  sheet.getRange(2, 7, lastRow - 1, 1).setHorizontalAlignment('right');  // MQ率
+  sheet.getRange(2, 8, lastRow - 1, 1).setHorizontalAlignment('center'); // ランク
+  
+  // 数値フォーマット
+  sheet.getRange(2, 3, lastRow - 1, 1).setNumberFormat('#,##0');     // Q
+  sheet.getRange(2, 4, lastRow - 1, 1).setNumberFormat('#,##0');     // P
+  sheet.getRange(2, 5, lastRow - 1, 1).setNumberFormat('#,##0');     // V
+  sheet.getRange(2, 6, lastRow - 1, 1).setNumberFormat('#,##0');     // MQ
+  
+  // 【重要】MQ率を正しくパーセント表示
+  sheet.getRange(2, 7, lastRow - 1, 1).setNumberFormat('0.00%');
+  
+  // ランク別の色分け
+  const rankRange = sheet.getRange(2, 8, lastRow - 1, 1);
+  const ranks = rankRange.getValues();
+  
+  for (let i = 0; i < ranks.length; i++) {
+    const cell = sheet.getRange(i + 2, 8);
+    const rank = ranks[i][0];
+    
+    switch(rank) {
+      case 'S':
+        cell.setBackground('#4CAF50').setFontColor('#FFFFFF').setFontWeight('bold');
+        break;
+      case 'A':
+        cell.setBackground('#8BC34A').setFontColor('#FFFFFF').setFontWeight('bold');
+        break;
+      case 'B':
+        cell.setBackground('#FFC107').setFontColor('#FFFFFF').setFontWeight('bold');
+        break;
+      case 'C':
+        cell.setBackground('#FF9800').setFontColor('#FFFFFF').setFontWeight('bold');
+        break;
+      case 'D':
+        cell.setBackground('#F44336').setFontColor('#FFFFFF').setFontWeight('bold');
+        break;
+    }
+  }
+  
+  // 列幅の自動調整
+  sheet.autoResizeColumns(1, 8);
+  
+  // 固定表示
+  sheet.setFrozenRows(1);
+  
+  Logger.log('商品別MQ分析シートのフォーマット完了');
+}
+
+
+/**
+ * 商品別月次MQ分析シート書式設定
+ */
+function formatProductMonthlyMQAnalysis(sheet) {
+  try {
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    
+    sheet.setFrozenRows(1);
+    
+    // ヘッダー書式
+    const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
+    headerRange.setBackground('#16A085')
+              .setFontColor('#FFFFFF')
+              .setFontWeight('bold')
+              .setHorizontalAlignment('center');
+    
+    // 年月・商品コード・商品名: テキスト
+    sheet.getRange(2, 1, lastRow - 1, 3).setNumberFormat('@');
+    
+    // 数量（列D）: カンマ区切り（小数なし）
+    sheet.getRange(2, 4, lastRow - 1, 1).setNumberFormat('#,##0');
+    
+    // 金額（列E-G）: カンマ区切り
+    sheet.getRange(2, 5, lastRow - 1, 3).setNumberFormat('#,##0');
+    
+    // MQ率（列H）: パーセント
+    sheet.getRange(2, 8, lastRow - 1, 1).setNumberFormat('0.00%');
+    
+    // ランク（列I）: テキスト
+    sheet.getRange(2, 9, lastRow - 1, 1).setNumberFormat('@');
+    
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    SpreadsheetApp.flush();
+    
+  } catch (e) {
+    Logger.log('⚠️ formatProductMonthlyMQAnalysis エラー: ' + e.message);
+  }
+}
+
+/**
+ * 全シート書式設定（軽量版・最終調整済み）
+ */
+function formatAllSheets() {
+  try {
+    Logger.log('📝 全シート書式設定開始');
+    SpreadsheetApp.getActiveSpreadsheet().toast('書式設定中...', 'MQ会計システム', 3);
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 書式設定対象シート（優先度順）
+    const sheetConfigs = [
+      { name: MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS, formatter: formatMonthlyAnalysis },
+      { name: MQ_CONFIG.SHEETS.MONTHLY_BREAKEVEN, formatter: formatMonthlyBreakeven },
+      { name: MQ_CONFIG.SHEETS.MONTHLY_SUMMARY, formatter: formatMonthlyMySummary },
+      { name: MQ_CONFIG.SHEETS.ANNUAL_BREAKEVEN, formatter: formatAnnualBreakeven },
+      { name: MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS, formatter: formatProductMQAnalysis },
+      { name: MQ_CONFIG.SHEETS.PRODUCT_MONTHLY_MQ_ANALYSIS, formatter: formatProductMonthlyMQAnalysis }
+    ];
+    
+    let formattedCount = 0;
+    for (const config of sheetConfigs) {
+      const sheet = ss.getSheetByName(config.name);
+      if (sheet && sheet.getLastRow() > 1) {
+        try {
+          config.formatter(sheet);
+          formattedCount++;
+          Logger.log(`  ✅ ${config.name} 書式設定完了`);
+        } catch (e) {
+          Logger.log(`  ⚠️ ${config.name} 書式設定スキップ: ${e.message}`);
+        }
+      }
+    }
+    
+    SpreadsheetApp.flush(); // 全変更を確定
+    Logger.log(`📝 書式設定完了: ${formattedCount}/${sheetConfigs.length}シート`);
+    
+    // 完了通知
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      `${formattedCount}シートの書式設定完了`, 
+      'MQ会計システム', 
+      5
+    );
+    
+  } catch (error) {
+    Logger.log('⚠️ 書式設定エラー: ' + error.message);
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '書式設定でエラーが発生しました', 
+      'エラー', 
+      5
+    );
+  }
+}
+
+/**
+ * メイン実行関数（エラーハンドリング強化版）
+ */
+function runMQSystemWithIncrementalProcessing() {
+  try {
+    Logger.log('🚀 MQ会計システム増分処理モード実行開始');
+    
+    const systemSheet = initializeSystemManage();
+    
+    const nextEngineLastRow = systemSheet.getRange('C2').getValue() || 1;
+    const amazonLastRow = systemSheet.getRange('C3').getValue() || 1;
+    
+    Logger.log(`📊 システム管理シート記録: NextEngine=${nextEngineLastRow}, Amazon=${amazonLastRow}`);
+    
+    const nextEngineNewLastRow = integrateNextEngineIncremental(nextEngineLastRow);
+    const amazonNewLastRow = integrateAmazonIncremental(amazonLastRow);
+    
+    if (nextEngineNewLastRow === nextEngineLastRow && amazonNewLastRow === amazonLastRow) {
+      Logger.log('⚠️ 新規データが見つかりませんでした');
+      Logger.log('📌 集計シートのみ更新する場合は recalculateAnalysisOnly() を実行してください');
+      return;
+    }
+    
+    systemSheet.getRange('C2').setValue(nextEngineNewLastRow);
+    systemSheet.getRange('C3').setValue(amazonNewLastRow);
+    
+    Logger.log('📊 MQ分析実行中...');
+    executeMQAnalysis();
+    
+    Logger.log('📊 各種集計実行中...');
+    executeDailySettlement();
+    executeMonthlyAnalysis();
+    executeMonthlyBreakevenAnalysis();
+    executeMonthlyMySummary();
+    executeAnnualMQAnalysis();
+    executeAnnualBreakevenAnalysis();
+    
+    Logger.log('📊 商品別分析実行中...');
+    executeProductMQAnalysis();
+    executeProductMonthlyMQAnalysis();
+    
+    Logger.log('📝 書式設定中...');
+    formatAllSheets();
+    
+    Logger.log('✅ MQ会計システム増分処理完了');
+    
+    SpreadsheetApp.getUi().alert(
+      '✅ 処理完了\n\n' +
+      'MQ会計システムの全処理が完了しました。'
+    );
+    
+  } catch (error) {
+    Logger.log(`❌ エラー発生: ${error.message}`);
+    Logger.log(`スタックトレース: ${error.stack}`);
+    
+    SpreadsheetApp.getUi().alert(
+      '❌ エラー発生\n\n' +
+      `エラー内容: ${error.message}\n\n` +
+      '詳細はログを確認してください。'
+    );
+  }
+}
+// ======================================================================
+// 13. 大量データ対応：分割処理関数
+// ======================================================================
+
+/**
+ * ステップ1: データ統合とMQ分析のみ実行
+ */
+function step1_IntegrateAndAnalyze() {
+  Logger.log('🚀 ステップ1: データ統合とMQ分析開始');
+  
+  const systemSheet = initializeSystemManage();
+  
+  const nextEngineLastRow = systemSheet.getRange('C2').getValue() || 1;
+  const amazonLastRow = systemSheet.getRange('C3').getValue() || 1;
+  
+  Logger.log(`📊 システム管理シート記録: NextEngine=${nextEngineLastRow}, Amazon=${amazonLastRow}`);
+  
+  const nextEngineNewLastRow = integrateNextEngineIncremental(nextEngineLastRow);
+  const amazonNewLastRow = integrateAmazonIncremental(amazonLastRow);
+  
+  if (nextEngineNewLastRow === nextEngineLastRow && amazonNewLastRow === amazonLastRow) {
+    Logger.log('⚠️ 新規データが見つかりませんでした');
+    return;
+  }
+  
+  systemSheet.getRange('C2').setValue(nextEngineNewLastRow);
+  systemSheet.getRange('C3').setValue(amazonNewLastRow);
+  
+  executeMQAnalysis();
+  
+  Logger.log('✅ ステップ1完了: 次に step2_GenerateReports() を実行してください');
+  SpreadsheetApp.getUi().alert('✅ ステップ1完了\n\nデータ統合とMQ分析が完了しました。\n次に「ステップ2: レポート生成」を実行してください。');
+}
+
+/**
+ * ステップ2: 各種集計レポート生成
+ */
+function step2_GenerateReports() {
+  Logger.log('🚀 ステップ2: レポート生成開始');
+  
+  executeDailySettlement();
+  executeMonthlyAnalysis();
+  executeMonthlyBreakevenAnalysis();
+  executeMonthlyMySummary();
+  executeAnnualMQAnalysis();
+  executeAnnualBreakevenAnalysis();
+  executeProductMQAnalysis();
+  executeProductMonthlyMQAnalysis();
+  
+  formatAllSheets();
+  
+  Logger.log('✅ ステップ2完了: すべてのレポートが生成されました');
+  SpreadsheetApp.getUi().alert('✅ ステップ2完了\n\nすべてのレポートが生成されました。\nMQ会計システムの処理が完了しました！');
+}
+
+/**
+ * データ診断: 売上の内訳を確認
+ */
+function diagnoseSalesData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. 統合売上データの確認
+  const integratedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  if (integratedSheet) {
+    const integratedData = integratedSheet.getDataRange().getValues();
+    Logger.log('=== 統合売上データ ===');
+    Logger.log(`総行数: ${integratedData.length - 1}件`);
+    
+    let totalSales = 0;
+    let nov2025Sales = 0;
+    let dec2025Sales = 0;
+    
+    for (let i = 1; i < integratedData.length; i++) {
+      const row = integratedData[i];
+      const dateValue = row[0]; // 受注日
+      const sales = parseFloat(row[5]) || 0; // P（売上高）
+      
+      totalSales += sales;
+      
+      if (dateValue instanceof Date) {
+        const year = dateValue.getFullYear();
+        const month = dateValue.getMonth() + 1;
+        
+        if (year === 2025 && month === 11) {
+          nov2025Sales += sales;
+        } else if (year === 2025 && month === 12) {
+          dec2025Sales += sales;
+        }
+      }
+    }
+    
+    Logger.log(`総売上: ${totalSales.toLocaleString()}円`);
+    Logger.log(`2025年11月売上: ${nov2025Sales.toLocaleString()}円`);
+    Logger.log(`2025年12月売上: ${dec2025Sales.toLocaleString()}円`);
+  }
+  
+  // 2. NextEngineの確認
+  const neSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.NEXTENGINE);
+  if (neSheet) {
+    const neData = neSheet.getDataRange().getValues();
+    Logger.log('\n=== NextEngineデータ ===');
+    Logger.log(`総行数: ${neData.length - 1}件`);
+    
+    // サンプル行を表示
+    if (neData.length > 1) {
+      Logger.log('サンプル行（1行目）:');
+      Logger.log(JSON.stringify(neData[1]));
+    }
+  }
+  
+  // 3. Amazonの確認
+  const amazonSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.AMAZON);
+  if (amazonSheet) {
+    const amazonData = amazonSheet.getDataRange().getValues();
+    Logger.log('\n=== Amazonデータ ===');
+    Logger.log(`総行数: ${amazonData.length - 1}件`);
+    
+    // サンプル行を表示
+    if (amazonData.length > 1) {
+      Logger.log('サンプル行（1行目）:');
+      Logger.log(JSON.stringify(amazonData[1]));
+    }
+  }
+  
+  // 4. MQ分析の確認
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  if (mqSheet) {
+    const mqData = mqSheet.getDataRange().getValues();
+    Logger.log('\n=== MQ分析データ ===');
+    Logger.log(`総行数: ${mqData.length - 1}件`);
+    
+    let totalMQSales = 0;
+    for (let i = 1; i < mqData.length; i++) {
+      const sales = parseFloat(mqData[i][5]) || 0; // P列
+      totalMQSales += sales;
+    }
+    Logger.log(`MQ分析の総売上: ${totalMQSales.toLocaleString()}円`);
+  }
+  
+  // 5. 日次決算の確認
+  const dailySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.DAILY_SETTLEMENT);
+  if (dailySheet) {
+    const dailyData = dailySheet.getDataRange().getValues();
+    Logger.log('\n=== 日次決算データ ===');
+    Logger.log(`総日数: ${dailyData.length - 1}日`);
+    
+    // 日付範囲を確認
+    if (dailyData.length > 1) {
+      Logger.log(`開始日: ${dailyData[1][1]}`);
+      Logger.log(`終了日: ${dailyData[dailyData.length - 1][1]}`);
+    }
+  }
+  
+  Logger.log('\n診断完了！');
+}
+
+/**
+ * 詳細診断: 元データの確認
+ */
+function diagnoseSourceData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  Logger.log('=== NextEngineシート 詳細診断 ===');
+  const neSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.NEXTENGINE);
+  if (neSheet) {
+    const neData = neSheet.getDataRange().getValues();
+    const header = neData[0];
+    
+    Logger.log(`総行数: ${neData.length - 1}件`);
+    Logger.log(`列構成: ${JSON.stringify(header)}`);
+    
+    // 売上金額列を特定
+    let salesColIndex = -1;
+    for (let i = 0; i < header.length; i++) {
+      if (header[i].includes('売上') || header[i].includes('金額') || header[i].includes('合計')) {
+        Logger.log(`  列${i}: ${header[i]}`);
+        salesColIndex = i;
+      }
+    }
+    
+    // 11月のデータを集計
+    let nov2025Total = 0;
+    let nov2025Count = 0;
+    let dec2025Total = 0;
+    let dec2025Count = 0;
+    
+    for (let i = 1; i < neData.length; i++) {
+      const row = neData[i];
+      const dateValue = row[1]; // 受注日（通常は列B）
+      
+      if (dateValue instanceof Date) {
+        const year = dateValue.getFullYear();
+        const month = dateValue.getMonth() + 1;
+        
+        if (salesColIndex >= 0) {
+          const salesValue = parseFloat(row[salesColIndex]) || 0;
+          
+          if (year === 2025 && month === 11) {
+            nov2025Total += salesValue;
+            nov2025Count++;
+          } else if (year === 2025 && month === 12) {
+            dec2025Total += salesValue;
+            dec2025Count++;
+          }
+        }
+      }
+    }
+    
+    Logger.log(`\n2025年11月: ${nov2025Count}件, 合計 ${nov2025Total.toLocaleString()}円`);
+    Logger.log(`2025年12月: ${dec2025Count}件, 合計 ${dec2025Total.toLocaleString()}円`);
+    
+    // サンプルデータを表示
+    Logger.log('\nサンプルデータ（最初の3行）:');
+    for (let i = 1; i <= Math.min(3, neData.length - 1); i++) {
+      Logger.log(`行${i}: ${JSON.stringify(neData[i])}`);
+    }
+  }
+  
+  Logger.log('\n=== Amazonシート 詳細診断 ===');
+  const amazonSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.AMAZON);
+  if (amazonSheet) {
+    const amazonData = amazonSheet.getDataRange().getValues();
+    const header = amazonData[0];
+    
+    Logger.log(`総行数: ${amazonData.length - 1}件`);
+    Logger.log(`列構成: ${JSON.stringify(header)}`);
+    
+    // 売上金額列を特定
+    let salesColIndex = -1;
+    for (let i = 0; i < header.length; i++) {
+      if (header[i].includes('売上') || header[i].includes('金額') || header[i].includes('合計')) {
+        Logger.log(`  列${i}: ${header[i]}`);
+        salesColIndex = i;
+      }
+    }
+    
+    // 11月のデータを集計
+    let nov2025Total = 0;
+    let nov2025Count = 0;
+    let dec2025Total = 0;
+    let dec2025Count = 0;
+    
+    for (let i = 1; i < amazonData.length; i++) {
+      const row = amazonData[i];
+      const dateValue = row[0]; // 受注日（通常は列A）
+      
+      if (dateValue instanceof Date) {
+        const year = dateValue.getFullYear();
+        const month = dateValue.getMonth() + 1;
+        
+        if (salesColIndex >= 0) {
+          const salesValue = parseFloat(row[salesColIndex]) || 0;
+          
+          if (year === 2025 && month === 11) {
+            nov2025Total += salesValue;
+            nov2025Count++;
+          } else if (year === 2025 && month === 12) {
+            dec2025Total += salesValue;
+            dec2025Count++;
+          }
+        }
+      }
+    }
+    
+    Logger.log(`\n2025年11月: ${nov2025Count}件, 合計 ${nov2025Total.toLocaleString()}円`);
+    Logger.log(`2025年12月: ${dec2025Count}件, 合計 ${dec2025Total.toLocaleString()}円`);
+    
+    // サンプルデータを表示
+    Logger.log('\nサンプルデータ（最初の3行）:');
+    for (let i = 1; i <= Math.min(3, amazonData.length - 1); i++) {
+      Logger.log(`行${i}: ${JSON.stringify(amazonData[i])}`);
+    }
+  }
+  
+  Logger.log('\n=== 統合売上データシート 詳細診断 ===');
+  const integratedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  if (integratedSheet) {
+    const integratedData = integratedSheet.getDataRange().getValues();
+    const header = integratedData[0];
+    
+    Logger.log(`総行数: ${integratedData.length - 1}件`);
+    Logger.log(`列構成: ${JSON.stringify(header)}`);
+    
+    // 11月のデータを集計
+    let nov2025Total = 0;
+    let nov2025Count = 0;
+    let dec2025Total = 0;
+    let dec2025Count = 0;
+    
+    for (let i = 1; i < integratedData.length; i++) {
+      const row = integratedData[i];
+      const dateValue = row[0]; // 受注日
+      const salesValue = parseFloat(row[5]) || 0; // P列（売上高）
+      
+      if (dateValue instanceof Date) {
+        const year = dateValue.getFullYear();
+        const month = dateValue.getMonth() + 1;
+        
+        if (year === 2025 && month === 11) {
+          nov2025Total += salesValue;
+          nov2025Count++;
+        } else if (year === 2025 && month === 12) {
+          dec2025Total += salesValue;
+          dec2025Count++;
+        }
+      }
+    }
+    
+    Logger.log(`\n2025年11月: ${nov2025Count}件, 合計 ${nov2025Total.toLocaleString()}円`);
+    Logger.log(`2025年12月: ${dec2025Count}件, 合計 ${dec2025Total.toLocaleString()}円`);
+    
+    // サンプルデータを表示
+    Logger.log('\nサンプルデータ（最初の3行）:');
+    for (let i = 1; i <= Math.min(3, integratedData.length - 1); i++) {
+      Logger.log(`行${i}: ${JSON.stringify(integratedData[i])}`);
+    }
+  }
+  
+  Logger.log('\n診断完了！');
+}
+
+function diagnoseMQAnalysisSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  
+  if (!mqSheet) {
+    Logger.log('⚠️ MQ分析シートが見つかりません');
+    return;
+  }
+  
+  const data = mqSheet.getDataRange().getValues();
+  const header = data[0];
+  
+  Logger.log('=== MQ分析シート 診断 ===');
+  Logger.log(`総行数: ${data.length - 1}件`);
+  Logger.log(`列構成: ${JSON.stringify(header)}`);
+  
+  // サンプルデータ（最初の5行）
+  Logger.log('\n=== サンプルデータ（最初の5行）===');
+  for (let i = 1; i <= Math.min(5, data.length - 1); i++) {
+    Logger.log(`行${i}:`);
+    Logger.log(`  日付: ${data[i][0]}`);
+    Logger.log(`  年月: ${data[i][1]}`);
+    Logger.log(`  商品コード: ${data[i][2]}`);
+    Logger.log(`  商品名: ${data[i][3]}`);
+    Logger.log(`  Q: ${data[i][4]}`);
+    Logger.log(`  P: ${data[i][5]}`);
+    Logger.log(`  V: ${data[i][6]}`);
+    Logger.log(`  MQ: ${data[i][7]}`);
+    Logger.log(`  データソース: ${data[i][8]}`);
+    Logger.log('');
+  }
+  
+  Logger.log('診断完了！');
+}
+
+/**
+ * 商品別MQ分析の生データ診断
+ */
+function diagnoseProductMQSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const outputSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MQ_ANALYSIS);
+  
+  if (!outputSheet) {
+    Logger.log('商品別MQ分析シートが見つかりません');
+    return;
+  }
+  
+  const data = outputSheet.getDataRange().getValues();
+  
+  Logger.log('=== 商品別MQ分析シート 診断 ===');
+  Logger.log(`総行数: ${data.length}`);
+  Logger.log(`ヘッダー行: ${JSON.stringify(data[0])}`);
+  
+  // 最初の5商品のデータを詳細表示
+  Logger.log('\n=== 最初の5商品の詳細データ ===');
+  for (let i = 1; i <= Math.min(5, data.length - 1); i++) {
+    const row = data[i];
+    Logger.log(`\n商品${i}:`);
+    Logger.log(`  商品コード: ${row[0]}`);
+    Logger.log(`  商品名: ${row[1]}`);
+    Logger.log(`  Q: ${row[2]} (型: ${typeof row[2]})`);
+    Logger.log(`  P: ${row[3]} (型: ${typeof row[3]})`);
+    Logger.log(`  V: ${row[4]} (型: ${typeof row[4]})`);
+    Logger.log(`  MQ: ${row[5]} (型: ${typeof row[5]})`);
+    Logger.log(`  MQ率: ${row[6]} (型: ${typeof row[6]})`);
+    Logger.log(`  ランク: ${row[7]}`);
+    
+    // MQ率を手動計算
+    const manualMQRate = row[3] > 0 ? row[5] / row[3] : 0;
+    Logger.log(`  手動計算MQ率: ${manualMQRate} (${(manualMQRate * 100).toFixed(2)}%)`);
+  }
+  
+  // セルのフォーマット情報も確認
+  Logger.log('\n=== MQ率列のフォーマット情報 ===');
+  const mqRateCell = outputSheet.getRange(2, 7); // 最初のデータ行のMQ率セル
+  Logger.log(`セルG2の値: ${mqRateCell.getValue()}`);
+  Logger.log(`セルG2の表示値: ${mqRateCell.getDisplayValue()}`);
+  Logger.log(`セルG2のフォーマット: ${mqRateCell.getNumberFormat()}`);
+}
+
+function debugCSVConfig() {
+  Logger.log('=== CSV_CONFIG 診断 ===');
+  Logger.log(`行削除ルール: ${CSV_CONFIG.ROW_DELETION_RULES.length}件`);
+  Logger.log(`列削除ルール: ${CSV_CONFIG.COLUMN_DELETION_RULES.length}件`);
+  Logger.log(`置換ルール: ${CSV_CONFIG.TEXT_REPLACEMENT_RULES.length}件`);
+  
+  // 構文エラーチェック
+  try {
+    for (let i = 0; i < CSV_CONFIG.ROW_DELETION_RULES.length; i++) {
+      const rule = CSV_CONFIG.ROW_DELETION_RULES[i];
+      if (!rule.column && rule.column !== 0) {
+        Logger.log(`⚠️ 行削除ルール ${i}: column が未定義`);
+      }
+      if (!rule.condition) {
+        Logger.log(`⚠️ 行削除ルール ${i}: condition が未定義`);
+      }
+    }
+    Logger.log('✅ 行削除ルール: 構文エラーなし');
+  } catch (e) {
+    Logger.log(`❌ 行削除ルール: ${e.message}`);
+  }
+  
+  try {
+    for (let i = 0; i < CSV_CONFIG.TEXT_REPLACEMENT_RULES.length; i++) {
+      const rule = CSV_CONFIG.TEXT_REPLACEMENT_RULES[i];
+      if (!rule.column && rule.column !== 0) {
+        Logger.log(`⚠️ 置換ルール ${i}: column が未定義`);
+      }
+      if (!rule.searchValue) {
+        Logger.log(`⚠️ 置換ルール ${i}: searchValue が未定義`);
+      }
+      if (!rule.replaceValue && rule.replaceValue !== '') {
+        Logger.log(`⚠️ 置換ルール ${i}: replaceValue が未定義`);
+      }
+    }
+    Logger.log('✅ 置換ルール: 構文エラーなし');
+  } catch (e) {
+    Logger.log(`❌ 置換ルール: ${e.message}`);
+  }
+}
+
+// ======================================================================
+// 12. 再計算専用関数
+// ======================================================================
+
+/**
+ * 集計シート再計算のみ実行（データ統合はスキップ）
+ */
+function recalculateAnalysisOnly() {
+  try {
+    Logger.log('🔄 集計シート再計算のみ実行開始...');
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '集計シートを再計算中...', 
+      'MQ会計システム', 
+      3
+    );
+    
+    // 各種集計を実行
+    Logger.log('📊 日次決算実行中...');
+    executeDailySettlement();
+    
+    Logger.log('📊 月次累積分析実行中...');
+    executeMonthlyAnalysis();
+    
+    Logger.log('📊 月次損益分岐点実行中...');
+    executeMonthlyBreakevenAnalysis();
+    
+    Logger.log('📊 月次サマリー実行中...');
+    executeMonthlyMySummary();
+    
+    Logger.log('📊 年度累積MQ分析実行中...');
+    executeAnnualMQAnalysis();
+    
+    Logger.log('📊 年度損益分岐点実行中...');
+    executeAnnualBreakevenAnalysis();
+    
+    Logger.log('📊 商品別MQ分析実行中...');
+    executeProductMQAnalysis();
+    
+    Logger.log('📊 商品別月次MQ分析実行中...');
+    executeProductMonthlyMQAnalysis();
+    
+    Logger.log('📝 書式設定中...');
+    formatAllSheets();
+    
+    Logger.log('✅ 集計シート再計算完了');
+    
+    // トースト通知に変更（エラー回避）
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '全ての集計シートが再計算されました。', 
+      '✅ 再計算完了', 
+      5
+    );
+    
+  } catch (error) {
+    Logger.log(`❌ エラー発生: ${error.message}`);
+    Logger.log(`スタックトレース: ${error.stack}`);
+    
+    // エラー時もトースト通知
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      `エラー: ${error.message}`, 
+      '❌ エラー発生', 
+      10
+    );
+  }
+}
+
+/**
+ * 商品別月次MQ分析の実行
+ */
+function executeProductMonthlyMQAnalysis() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  
+  // MQ分析シートが存在しない場合はスキップ
+  if (!mqSheet) {
+    Logger.log('⚠️ MQ分析シートが見つかりません。商品別月次MQ分析をスキップします。');
+    return;
+  }
+  
+  // 商品別月次MQ分析シートを取得または作成
+  let productMonthlySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MONTHLY_MQ_ANALYSIS);
+  if (!productMonthlySheet) {
+    productMonthlySheet = ss.insertSheet(MQ_CONFIG.SHEETS.PRODUCT_MONTHLY_MQ_ANALYSIS);
+    Logger.log('✅ 商品別月次MQ分析シートを新規作成');
+  }
+  
+  productMonthlySheet.clear();
+  productMonthlySheet.appendRow([
+    '年月', '商品コード', '商品名', 'Q（販売数量）', 'P（売上高）', 
+    'V（変動費）', 'MQ', 'MQ率(%)', 'ランク'
+  ]);
+  
+  Logger.log('📊 商品別月次MQ分析: データ集計開始...');
+  
+  const mqData = mqSheet.getDataRange().getValues();
+  
+  // データが存在しない場合はスキップ
+  if (mqData.length <= 1) {
+    Logger.log('⚠️ MQ分析データが空です。商品別月次MQ分析をスキップします。');
+    return;
+  }
+  
+  const monthlyProductMap = {};
+  
+  // 固定の列インデックスを使用
+  const yearMonthIdx = 1; // 年月
+  const skuIdx = 2;       // 商品コード
+  const nameIdx = 3;      // 商品名
+  const qtyIdx = 4;       // Q(販売数量)
+  const salesIdx = 5;     // P(売上高)
+  const costIdx = 6;      // V(変動費)
+  const mqIdx = 7;        // MQ
+  
+  for (let i = 1; i < mqData.length; i++) {
+    const row = mqData[i];
+    const yearMonthValue = row[yearMonthIdx];
+    const sku = row[skuIdx];
+    const name = row[nameIdx];
+    const qty = row[qtyIdx] || 0;
+    const sales = row[salesIdx] || 0;
+    const cost = row[costIdx] || 0;
+    const mq = row[mqIdx] || 0;
+    
+    let yearMonth;
+    if (yearMonthValue instanceof Date) {
+      yearMonth = Utilities.formatDate(yearMonthValue, 'JST', 'yyyy/MM');
+    } else if (typeof yearMonthValue === 'string') {
+      yearMonth = yearMonthValue;
+    } else {
+      continue;
+    }
+    
+    if (!yearMonth || !sku) continue;
+    
+    const key = `${yearMonth}_${sku}`;
+    
+    if (!monthlyProductMap[key]) {
+      monthlyProductMap[key] = {
+        yearMonth: yearMonth,
+        sku: sku,
+        name: name,
+        totalQty: 0,
+        totalSales: 0,
+        totalCost: 0,
+        totalMQ: 0
+      };
+    }
+    
+    monthlyProductMap[key].totalQty += qty;
+    monthlyProductMap[key].totalSales += sales;
+    monthlyProductMap[key].totalCost += cost;
+    monthlyProductMap[key].totalMQ += mq;
+    
+    // 進捗ログ（500件ごと）
+    if (i % 500 === 0) {
+      Logger.log(`  処理中... ${i}/${mqData.length}行`);
+    }
+  }
+  
+  Logger.log(`📊 商品別月次MQ分析: ${Object.keys(monthlyProductMap).length}件を集計完了`);
+  
+  const outputData = [];
+  for (const key in monthlyProductMap) {
+    const data = monthlyProductMap[key];
+    const mqRate = data.totalSales > 0 ? data.totalMQ / data.totalSales : 0;
+    
+    outputData.push([
+      data.yearMonth,
+      data.sku,
+      data.name,
+      data.totalQty,
+      data.totalSales,
+      data.totalCost,
+      data.totalMQ,
+      mqRate,
+      ''
+    ]);
+  }
+  
+  Logger.log('📊 商品別月次MQ分析: ソート中...');
+  outputData.sort((a, b) => {
+    const yearMonthA = String(a[0] || '');
+    const yearMonthB = String(b[0] || '');
+    const dateCompare = yearMonthA.localeCompare(yearMonthB);
+    if (dateCompare !== 0) return dateCompare;
+    return b[6] - a[6];
+  });
+  
+  Logger.log('📊 商品別月次MQ分析: ランク付け中...');
+  const monthGroups = {};
+  for (const row of outputData) {
+    const month = row[0];
+    if (!monthGroups[month]) monthGroups[month] = [];
+    monthGroups[month].push(row);
+  }
+  
+  for (const month in monthGroups) {
+    const group = monthGroups[month];
+    const topN = Math.ceil(group.length * 0.2);
+    
+    for (let i = 0; i < group.length; i++) {
+      if (i < topN) group[i][8] = 'S';
+      else if (i < topN * 2) group[i][8] = 'A';
+      else if (i < topN * 3) group[i][8] = 'B';
+      else group[i][8] = 'C';
+    }
+  }
+  
+  Logger.log('📊 商品別月次MQ分析: シート書き込み中...');
+  if (outputData.length > 0) {
+    productMonthlySheet.getRange(2, 1, outputData.length, 9).setValues(outputData);
+  }
+  
+  Logger.log(`✅ 商品別月次MQ分析: ${outputData.length}件出力`);
+}
+
+/**
+ * 固定費確定後の再計算専用関数（正しい関数名版）
+ */
+function recalculateAfterFixedCostUpdate() {
+  try {
+    Logger.log('=== 固定費確定後の再計算を開始 ===');
+    const startTime = new Date();
+    
+    // 固定費に影響する分析のみ再実行（正しい関数名を使用）
+    Logger.log('月次累積分析を再計算中...');
+    executeMonthlyAnalysis();  // ✅ 追加：月次分析シートも再計算
+    
+    Logger.log('月次損益分岐点を再計算中...');
+    executeMonthlyBreakevenAnalysis();  // ← 修正
+    
+    Logger.log('月次サマリーを再計算中...');
+    executeMonthlyMySummary();  // ← 修正
+    
+    Logger.log('年度損益分岐点を再計算中...');
+    executeAnnualBreakevenAnalysis();  // ← 修正
+    
+    // 該当シートのフォーマット
+    Logger.log('シートのフォーマット中...');
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 月次分析シートのフォーマット
+    const monthlyAnalysisSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_ANALYSIS);
+    if (monthlyAnalysisSheet) {
+      formatMonthlyAnalysis(monthlyAnalysisSheet);
+    }
+    
+    // 月次損益分岐点シートのフォーマット
+    const monthlyBreakevenSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_BREAKEVEN);
+    if (monthlyBreakevenSheet) {
+      formatMonthlyBreakeven(monthlyBreakevenSheet);
+    }
+    
+    // 月次サマリーシートのフォーマット
+    const monthlySummarySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_SUMMARY);
+    if (monthlySummarySheet) {
+      formatMonthlyMySummary(monthlySummarySheet);
+    }
+    
+    // 年度損益分岐点シートのフォーマット
+    const annualBreakevenSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.ANNUAL_BREAKEVEN);
+    if (annualBreakevenSheet) {
+      formatAnnualBreakeven(annualBreakevenSheet);
+    }
+    
+    const endTime = new Date();
+    const elapsedTime = (endTime - startTime) / 1000;
+    
+    Logger.log('=== 固定費確定後の再計算が完了 ===');
+    Logger.log(`処理時間: ${elapsedTime.toFixed(1)}秒`);
+    Logger.log('更新対象:');
+    Logger.log('  ✓ 月次累積分析');
+    Logger.log('  ✓ 月次損益分岐点');
+    Logger.log('  ✓ 月次サマリー');
+    Logger.log('  ✓ 年度損益分岐点');
+    
+    // 完了通知（トースト形式）
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '固定費確定後の再計算が完了しました。\n処理時間: ' + elapsedTime.toFixed(1) + '秒',
+      '✓ 完了',
+      5
+    );
+    
+    return {
+      success: true,
+      elapsedTime: elapsedTime,
+      message: '固定費確定後の再計算が正常に完了しました。'
+    };
+    
+  } catch (error) {
+    Logger.log('❌ エラー発生: ' + error.toString());
+    Logger.log('スタックトレース: ' + error.stack);
+    
+    // エラー通知
+    try {
+      SpreadsheetApp.getActiveSpreadsheet().toast(
+        'エラーが発生しました: ' + error.toString(),
+        '❌ エラー',
+        10
+      );
+    } catch (toastError) {
+      Logger.log('トースト通知も失敗: ' + toastError.toString());
+    }
+    
+    throw error;
+  }
+}
+
+// ======================================================================
+// 固定費確定後の再計算（確認ダイアログ付き）
+// ======================================================================
+function recalculateAfterFixedCostUpdateWithConfirm() {
+  try {
+    const ui = SpreadsheetApp.getUi();
+    
+    // 確認ダイアログを表示
+    const response = ui.alert(
+      '固定費確定後の再計算を実施します。\n\n' +
+      '以下のシートが再計算されます:\n' +
+      '  • 月次損益分岐点\n' +
+      '  • 月次サマリー\n' +
+      '  • 年度損益分岐点\n\n' +
+      '処理を続行しますか？',
+      ui.ButtonSet.YES_NO
+    );
+    
+    // ユーザーが「キャンセル」または閉じた場合
+    if (response !== ui.Button.YES) {
+      Logger.log('ユーザーが固定費確定後の再計算をキャンセルしました');
+      return;
+    }
+    
+    // 確認メッセージを表示
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '固定費確定後の再計算を開始します...',
+      'MQ会計システム',
+      2
+    );
+    
+    // 既存の再計算関数を呼び出す
+    const result = recalculateAfterFixedCostUpdate();
+    
+    return result;
+    
+  } catch (error) {
+    Logger.log(`❌ エラー発生: ${error.message}`);
+    Logger.log(`スタックトレース: ${error.stack}`);
+    
+    SpreadsheetApp.getUi().alert(
+      '❌ エラー発生\n\n' +
+      `エラー内容: ${error.message}\n\n` +
+      '詳細はログを確認してください。'
+    );
+    
+    throw error;
+  }
+}
+
+/**
+ * 月別固定費の読み込み状況を診断
+ */
+function diagnoseFixedCostLoading() {
+  Logger.log('=== 月別固定費 読み込み診断 ===\n');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fixedCostSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_FIXED_COST);
+  
+  if (!fixedCostSheet) {
+    Logger.log('⚠️ 月別固定費シートが見つかりません');
+    return;
+  }
+  
+  const data = fixedCostSheet.getDataRange().getValues();
+  
+  Logger.log('【シート上のデータ】');
+  for (let i = 0; i < Math.min(5, data.length); i++) {
+    if (i === 0) {
+      Logger.log(`ヘッダー: ${JSON.stringify(data[i])}`);
+    } else {
+      Logger.log(`行${i}: 年月=${data[i][0]}, 仮=${data[i][1]}, 確定=${data[i][2]}`);
+    }
+  }
+  
+  Logger.log('\n【システムが使用する固定費】');
+  const fixedCostMap = loadMonthlyFixedCost();
+  
+  Logger.log('\n【結果サマリー】');
+  for (const yearMonth in fixedCostMap) {
+    Logger.log(`  ${yearMonth}: ${fixedCostMap[yearMonth].toLocaleString()}円`);
+  }
+  
+  Logger.log('\n診断完了');
+}
+
+/**
+ * 月別固定費シートの構造と読み込み状況を詳細診断
+ */
+function diagnoseFixedCostDetailed() {
+  Logger.log('=== 月別固定費 詳細診断 ===\n');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const fixedCostSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MONTHLY_FIXED_COST);
+  
+  if (!fixedCostSheet) {
+    Logger.log('⚠️ 月別固定費シートが見つかりません');
+    return;
+  }
+  
+  const data = fixedCostSheet.getDataRange().getValues();
+  
+  Logger.log('【1. シート構造】');
+  Logger.log(`総列数: ${data[0].length}列`);
+  Logger.log(`総行数: ${data.length}行`);
+  Logger.log(`ヘッダー: ${JSON.stringify(data[0])}`);
+  
+  Logger.log('\n【2. 生データ（最初の3行）】');
+  for (let i = 0; i < Math.min(3, data.length); i++) {
+    Logger.log(`行${i}: ${JSON.stringify(data[i])}`);
+  }
+  
+  Logger.log('\n【3. 列インデックス確認】');
+  for (let i = 1; i < Math.min(3, data.length); i++) {
+    Logger.log(`\n行${i}のデータ:`);
+    Logger.log(`  列0（年月）: ${data[i][0]} (型: ${typeof data[i][0]})`);
+    Logger.log(`  列1（仮固定費）: ${data[i][1]} (型: ${typeof data[i][1]})`);
+    Logger.log(`  列2（確定固定費）: ${data[i][2]} (型: ${typeof data[i][2]})`);
+    if (data[i].length > 3) {
+      Logger.log(`  列3: ${data[i][3]} (型: ${typeof data[i][3]})`);
+    }
+    if (data[i].length > 4) {
+      Logger.log(`  列4: ${data[i][4]} (型: ${typeof data[i][4]})`);
+    }
+  }
+  
+  Logger.log('\n【4. 固定費選択ロジックのテスト】');
+  for (let i = 1; i < Math.min(3, data.length); i++) {
+    const yearMonth = data[i][0];
+    const tentativeCost = data[i][1];
+    const confirmedCost = data[i][2];
+    
+    Logger.log(`\n行${i} (${yearMonth}):`);
+    Logger.log(`  仮固定費: ${tentativeCost} (空白: ${tentativeCost === '' || tentativeCost === null})`);
+    Logger.log(`  確定固定費: ${confirmedCost} (空白: ${confirmedCost === '' || confirmedCost === null})`);
+    
+    // 選択ロジックをテスト
+    let costToUse = 0;
+    let costType = '';
+    
+    if (confirmedCost !== '' && confirmedCost !== null && confirmedCost !== undefined) {
+      const parsedConfirmed = parseFloat(confirmedCost);
+      if (!isNaN(parsedConfirmed) && parsedConfirmed > 0) {
+        costToUse = parsedConfirmed;
+        costType = '確定';
+      }
+    }
+    
+    if (costToUse === 0) {
+      if (tentativeCost !== '' && tentativeCost !== null && tentativeCost !== undefined) {
+        const parsedTentative = parseFloat(tentativeCost);
+        if (!isNaN(parsedTentative) && parsedTentative > 0) {
+          costToUse = parsedTentative;
+          costType = '仮';
+        }
+      }
+    }
+    
+    Logger.log(`  → 使用する固定費: ${costToUse.toLocaleString()}円 (${costType})`);
+  }
+  
+  Logger.log('\n【5. loadMonthlyFixedCost()の実行結果】');
+  const fixedCostMap = loadMonthlyFixedCost();
+  
+  Logger.log('\n【6. 最終結果】');
+  for (const yearMonth in fixedCostMap) {
+    Logger.log(`  ${yearMonth}: ${fixedCostMap[yearMonth].toLocaleString()}円`);
+  }
+  
+  Logger.log('\n診断完了');
+}
+
+/**
+ * 在庫データシートの初期化
+ * ユーザーが在庫データを入力するためのシートを作成
+ */
+function initializeInventoryDataSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    Logger.log('✅ 在庫データシートを新規作成');
+  }
+  
+  // ヘッダー行を設定
+  sheet.clear();
+  sheet.appendRow([
+    '計測日',
+    '商品コード',
+    '商品名',
+    '在庫数',
+    '備考'
+  ]);
+  
+  // ヘッダー書式
+  const headerRange = sheet.getRange(1, 1, 1, 5);
+  headerRange.setBackground('#4A90E2')
+            .setFontColor('#FFFFFF')
+            .setFontWeight('bold')
+            .setHorizontalAlignment('center');
+  
+  // サンプルデータを追加（参考用）
+  sheet.appendRow([
+    new Date('2025-12-01'),
+    'eim-01-ph-01',
+    'サンプル商品1',
+    100,
+    'サンプルデータ'
+  ]);
+  
+  sheet.appendRow([
+    new Date('2025-12-01'),
+    'eim-01-ph-02',
+    'サンプル商品2',
+    50,
+    'サンプルデータ'
+  ]);
+  
+  // 列幅調整
+  sheet.setColumnWidth(1, 120); // 計測日
+  sheet.setColumnWidth(2, 150); // 商品コード
+  sheet.setColumnWidth(3, 200); // 商品名
+  sheet.setColumnWidth(4, 100); // 在庫数
+  sheet.setColumnWidth(5, 200); // 備考
+  
+  // 固定行
+  sheet.setFrozenRows(1);
+  
+  Logger.log('✅ 在庫データシートの初期化完了');
+  
+  SpreadsheetApp.getUi().alert(
+    '✅ 在庫データシート作成完了\n\n' +
+    '「在庫データ」シートに以下の形式でデータを入力してください:\n\n' +
+    '計測日 | 商品コード | 商品名 | 在庫数 | 備考\n\n' +
+    '※サンプルデータが2行入っています。削除して実際のデータを入力してください。'
+  );
+}
+
+/**
+ * 週次在庫回転率を計算
+ */
+function calculateWeeklyInventoryTurnover() {
+  try {
+    const startTime = Date.now();
+    Logger.log('=== 週次在庫回転率計算開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const inventorySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    
+    if (!inventorySheet) {
+      throw new Error('在庫データシートが見つかりません。');
+    }
+    
+    // データ読み込み
+    const data = inventorySheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    Logger.log(`📊 在庫データ読込: ${rows.length}行`);
+    
+    if (rows.length === 0) {
+      throw new Error('在庫データが入力されていません。');
+    }
+    
+    // 列インデックスを取得
+    const colDate = headers.indexOf('計測日');
+    const colPeriodType = headers.indexOf('期間タイプ');
+    const colProductCode = headers.indexOf('商品コード');
+    const colProductName = headers.indexOf('商品名');
+    const colQuantity = headers.indexOf('在庫数');
+    
+    Logger.log(`列構成: 計測日=${colDate}, 期間タイプ=${colPeriodType}, 商品コード=${colProductCode}, 商品名=${colProductName}, 在庫数=${colQuantity}`);
+    
+    // 週次データのみを抽出
+    const weeklyData = {};
+    
+    rows.forEach((row, index) => {
+      const date = row[colDate];
+      const periodType = row[colPeriodType];
+      const productCode = String(row[colProductCode]).trim();  // ★String()で明示的に文字列化
+      const productName = row[colProductName];
+      const quantity = Number(row[colQuantity]) || 0;
+      
+      // 空行をスキップ
+      if (!productCode || productCode === '') {
+        return;
+      }
+      
+      // 週次データのみを対象
+      if (periodType !== '週次') {
+        return;
+      }
+      
+      // 日付を文字列に変換
+      const dateStr = Utilities.formatDate(new Date(date), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+      
+      // 日付×商品コード別にデータを格納
+      const key = `${dateStr}_${productCode}`;
+      
+      weeklyData[key] = {
+        date: dateStr,
+        productCode: productCode,  // ★商品コードを保存
+        productName: productName,
+        quantity: quantity
+      };
+    });
+    
+    Logger.log(`✅ 週次データ読込: ${Object.keys(weeklyData).length}件`);
+    
+    if (Object.keys(weeklyData).length === 0) {
+      throw new Error('週次データが見つかりません。');
+    }
+    
+    // 日付でグループ化
+    const dateGroups = {};
+    Object.values(weeklyData).forEach(item => {
+      if (!dateGroups[item.date]) {
+        dateGroups[item.date] = [];
+      }
+      dateGroups[item.date].push(item);
+    });
+    
+    const dates = Object.keys(dateGroups).sort();
+    Logger.log(`📅 計測日: ${dates.length}日分 [${dates.join(', ')}]`);
+    
+    if (dates.length < 2) {
+      throw new Error('週次計算には最低2つの計測日が必要です。現在: ' + dates.length + '日分');
+    }
+    
+    // MQデータと商品マスターを読み込み
+    Logger.log('📊 MQデータと商品マスターを読み込み中...');
+    const mqData = loadMQData();
+    const productMaster = loadProductMaster();
+    Logger.log(`✅ MQデータ: ${Object.keys(mqData).length}商品`);
+    Logger.log(`✅ 商品マスター: ${Object.keys(productMaster).length}商品`);
+    
+    // 週次回転率を計算
+    const results = [];
+    
+    for (let i = 0; i < dates.length - 1; i++) {
+      const startDate = dates[i];
+      const endDate = dates[i + 1];
+      
+      const startInventory = dateGroups[startDate];
+      const endInventory = dateGroups[endDate];
+      
+      // 期間の日数を計算
+      const daysDiff = Math.round((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+      
+      Logger.log(`\n=== 期間: ${startDate} 〜 ${endDate} (${daysDiff}日間) ===`);
+      
+      // 共通商品コードを取得
+      const startCodes = new Set(startInventory.map(item => item.productCode));
+      const endCodes = new Set(endInventory.map(item => item.productCode));
+      const commonCodes = [...startCodes].filter(code => endCodes.has(code));
+      
+      Logger.log(`共通商品: ${commonCodes.length}商品`);
+      
+      let calculatedCount = 0;
+      
+      // 各商品の回転率を計算
+      commonCodes.forEach(productCode => {
+        const startItem = startInventory.find(item => item.productCode === productCode);
+        const endItem = endInventory.find(item => item.productCode === productCode);
+        
+        if (!startItem || !endItem) return;
+        
+        const startQty = startItem.quantity;
+        const endQty = endItem.quantity;
+        const avgQty = (startQty + endQty) / 2;
+        
+        // 商品マスターから原価を取得
+        const product = productMaster[productCode];
+        if (!product || !product.unitCost) {
+          return;
+        }
+        
+        const cost = product.unitCost;
+        const avgValue = avgQty * cost;
+        
+        // 期間内の売上データを集計
+        let soldQty = 0;
+        let cogs = 0;
+        
+        if (mqData[productCode]) {
+          mqData[productCode].forEach(record => {
+            const recordDate = record.date;
+            if (recordDate >= startDate && recordDate <= endDate) {
+              soldQty += record.quantity || 0;
+              cogs += record.variableCost || 0;
+            }
+          });
+        }
+        
+        // 在庫変動がない商品はスキップ
+        if (startQty === 0 && endQty === 0 && soldQty === 0) {
+          return;
+        }
+        
+        // 回転率を計算
+        const qtyTurnover = avgQty > 0 ? soldQty / avgQty : 0;
+        const valueTurnover = avgValue > 0 ? cogs / avgValue : 0;
+        
+        const qtyTurnoverDays = qtyTurnover > 0 ? daysDiff / qtyTurnover : 0;
+        const valueTurnoverDays = valueTurnover > 0 ? daysDiff / valueTurnover : 0;
+        
+        results.push({
+          period: `${startDate}〜${endDate}`,
+          days: daysDiff,
+          productCode: productCode,  // ★商品コードを明示的に追加
+          productName: product.name || startItem.productName,
+          startQty: startQty,
+          endQty: endQty,
+          avgQty: avgQty,
+          avgValue: avgValue,
+          soldQty: soldQty,
+          cogs: cogs,
+          qtyTurnover: qtyTurnover,
+          valueTurnover: valueTurnover,
+          qtyTurnoverDays: qtyTurnoverDays,
+          valueTurnoverDays: valueTurnoverDays
+        });
+        
+        calculatedCount++;
+      });
+      
+      Logger.log(`✅ この期間で計算: ${calculatedCount}商品`);
+    }
+    
+    Logger.log(`\n✅ 計算完了: ${results.length}件`);
+    
+    if (results.length === 0) {
+      throw new Error('計算結果が0件です。商品マスターに原価情報が登録されているか確認してください。');
+    }
+    
+    // 結果を出力
+    outputInventoryTurnoverResults(results, MQ_CONFIG.SHEETS.WEEKLY_INVENTORY_TURNOVER);
+    
+    const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+    Logger.log(`=== 週次在庫回転率計算完了: ${elapsedTime}秒 ===`);
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      `週次在庫回転率計算完了: ${results.length}件 / 処理時間: ${elapsedTime}秒`,
+      '計算完了',
+      5
+    );
+    
+    return {
+      success: true,
+      count: results.length,
+      elapsedTime: elapsedTime
+    };
+    
+  } catch (error) {
+    Logger.log('❌ エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      'エラーが発生しました: ' + error.message,
+      'エラー',
+      10
+    );
+    
+    throw error;
+  }
+}
+
+
+/**
+ * MQデータを読み込み（商品コード別・日付別に集計）
+ */
+/**
+ * MQデータを読み込み（商品コード別・日付別に集計）
+ */
+function loadMQData() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName('MQ分析');  // ★変更: 日次決算 → MQ分析
+    
+    if (!sheet) {
+      Logger.log('⚠️ MQ分析シートが見つかりません');
+      return {};
+    }
+    
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    const colDate = headers.indexOf('日付');
+    const colProductCode = headers.indexOf('商品コード');
+    const colQuantity = headers.indexOf('Q(販売数量)');
+    const colVariableCost = headers.indexOf('V（変動費）');
+    
+    if (colDate < 0 || colProductCode < 0 || colQuantity < 0 || colVariableCost < 0) {
+      Logger.log('⚠️ MQ分析シートの列構成が不正です');
+      Logger.log(`列: 日付=${colDate}, 商品コード=${colProductCode}, Q(販売数量)=${colQuantity}, V（変動費）=${colVariableCost}`);
+      return {};
+    }
+    
+    const mqData = {};
+    
+    rows.forEach(row => {
+      const date = row[colDate];
+      const productCode = row[colProductCode];
+      const quantity = Number(row[colQuantity]) || 0;
+      const variableCost = Number(row[colVariableCost]) || 0;
+      
+      if (!productCode) return;
+      
+      const dateStr = Utilities.formatDate(new Date(date), Session.getScriptTimeZone(), 'yyyy-MM-dd');
+      
+      if (!mqData[productCode]) {
+        mqData[productCode] = [];
+      }
+      
+      mqData[productCode].push({
+        date: dateStr,
+        quantity: quantity,
+        variableCost: variableCost
+      });
+    });
+    
+    Logger.log(`✅ MQデータ読込: ${Object.keys(mqData).length}商品`);
+    
+    return mqData;
+    
+  } catch (error) {
+    Logger.log('⚠️ MQデータ読込エラー: ' + error.message);
+    return {};
+  }
+}
+
+
+/**
+ * 月次在庫回転率の計算
+ */
+function calculateMonthlyInventoryTurnover() {
+  try {
+    Logger.log('🔄 月次在庫回転率計算開始...');
+    
+    // UIが使えないコンテキストでも通知できるユーティリティ
+    function notify(message, title) {
+      try {
+        SpreadsheetApp.getUi().alert(message);
+      } catch (e) {
+        try {
+          SpreadsheetApp.getActiveSpreadsheet().toast(message, title || '通知', 10);
+        } catch (e2) {
+          Logger.log('通知失敗: ' + e2.message);
+        }
+      }
+    }
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const inventorySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+    const productMasterSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+    
+    // シート存在チェック
+    if (!inventorySheet) {
+      notify('⚠️ 在庫データシートが見つかりません。\n\n先に「在庫データ初期化」を実行してください。', 'エラー');
+      return;
+    }
+
+    if (!mqSheet || !productMasterSheet) {
+      notify('⚠️ MQ分析シートまたは商品マスターシートが見つかりません。', 'エラー');
+      return;
+    }
+    
+    // データ読み込み
+    const inventoryData = inventorySheet.getDataRange().getValues();
+    const mqData = mqSheet.getDataRange().getValues();
+    const productMaster = loadProductMaster();
+    
+    if (inventoryData.length <= 1) {
+      notify('⚠️ 在庫データが入力されていません。\n\n「在庫データ」シートにデータを入力してください。', 'エラー');
+      return;
+    }
+    
+    // 在庫データを年月ごとにグループ化（ヘッダーから列を決定、期間タイプ=月次のみ集計）
+    const inventoryByMonth = {};
+    const invHeaders = inventoryData[0] || [];
+    const colDate = invHeaders.indexOf('計測日') >= 0 ? invHeaders.indexOf('計測日') : 0;
+    const colPeriod = invHeaders.indexOf('期間タイプ') >= 0 ? invHeaders.indexOf('期間タイプ') : 1;
+    const colSku = invHeaders.indexOf('商品コード') >= 0 ? invHeaders.indexOf('商品コード') : 2;
+    const colQty = invHeaders.indexOf('在庫数') >= 0 ? invHeaders.indexOf('在庫数') : 4;
+
+    for (let i = 1; i < inventoryData.length; i++) {
+      const row = inventoryData[i];
+      const dateValue = row[colDate];
+      const periodType = String(row[colPeriod] || '').trim();
+      const sku = String(row[colSku] || '').trim();
+      const qty = parseFloat(row[colQty]) || 0;
+
+      // 月次データのみを集計
+      if (periodType !== '月次') continue;
+
+      if (!dateValue || !sku) continue;
+
+      const dateObj = new Date(dateValue);
+      if (isNaN(dateObj.getTime())) continue;
+      const monthKey = Utilities.formatDate(dateObj, 'JST', 'yyyy/MM');
+
+      if (!inventoryByMonth[monthKey]) inventoryByMonth[monthKey] = {};
+      if (!inventoryByMonth[monthKey][sku]) inventoryByMonth[monthKey][sku] = { sum: 0, count: 0 };
+
+      inventoryByMonth[monthKey][sku].sum += qty;
+      inventoryByMonth[monthKey][sku].count += 1;
+    }
+
+    // 平均在庫数を計算に置換（sum/count -> 平均数値）
+    for (const month in inventoryByMonth) {
+      for (const sku in inventoryByMonth[month]) {
+        const d = inventoryByMonth[month][sku];
+        inventoryByMonth[month][sku] = (d.count > 0) ? (d.sum / d.count) : 0;
+      }
+    }
+    
+    Logger.log(`📊 在庫データ読込: ${Object.keys(inventoryByMonth).length}ヶ月分`);
+    
+    // 月次在庫回転率を計算
+    const results = calculateInventoryTurnoverByMonth(
+      inventoryByMonth,
+      mqData,
+      productMaster
+    );
+    
+    // 結果を出力
+    outputInventoryTurnoverResults(
+      results,
+      MQ_CONFIG.SHEETS.MONTHLY_INVENTORY_TURNOVER,
+      '月次'
+    );
+    
+    Logger.log('✅ 月次在庫回転率計算完了');
+    
+    notify('✅ 月次在庫回転率計算完了\n\n' +
+      '「月次在庫回転率」シートに結果が出力されました。', '完了');
+    
+  } catch (error) {
+    Logger.log(`❌ エラー発生: ${error.message}`);
+    Logger.log(`スタックトレース: ${error.stack}`);
+    
+    notify('❌ エラー発生\n\n' +
+      `エラー内容: ${error.message}\n\n` +
+      '詳細はログを確認してください。', 'エラー');
+  }
+}
+
+/**
+ * 月次在庫回転率の計算ロジック
+ */
+function calculateInventoryTurnoverByMonth(inventoryByMonth, mqData, productMaster) {
+  const results = [];
+  
+  // 年月ごとの売上データを集計
+  const salesByMonth = {};
+  
+  // MQ分析データの列インデックスをヘッダーから取得
+  const mqHeaders = mqData[0] || [];
+  const colMqDate = mqHeaders.indexOf('日付') >= 0 ? mqHeaders.indexOf('日付') : 0;
+  const colMqSku = mqHeaders.indexOf('商品コード') >= 0 ? mqHeaders.indexOf('商品コード') : 2;
+  const colMqQty = mqHeaders.indexOf('Q(販売数量)') >= 0 ? mqHeaders.indexOf('Q(販売数量)') : 4;
+  const colMqCost = mqHeaders.indexOf('V（変動費）') >= 0 ? mqHeaders.indexOf('V（変動費）') : (mqHeaders.indexOf('V(変動費)') >= 0 ? mqHeaders.indexOf('V(変動費)') : 6);
+
+  Logger.log(`MQ分析ヘッダー: ${mqHeaders.join(' | ')}`);
+  Logger.log(`列インデックス: 日付=${colMqDate}, SKU=${colMqSku}, 数量=${colMqQty}, 原価=${colMqCost}`);
+
+  for (let i = 1; i < mqData.length; i++) {
+    const row = mqData[i];
+    const dateValue = row[colMqDate];
+    const sku = String(row[colMqSku] || '').trim();
+    const qty = parseFloat(row[colMqQty]) || 0;
+    const variableCost = parseFloat(row[colMqCost]) || 0;
+    
+    if (!dateValue || !sku) continue;
+    
+    const dateObj = new Date(dateValue);
+    if (isNaN(dateObj.getTime())) continue;
+    const monthKey = Utilities.formatDate(dateObj, 'JST', 'yyyy/MM');
+    
+    if (!salesByMonth[monthKey]) {
+      salesByMonth[monthKey] = {};
+    }
+    
+    if (!salesByMonth[monthKey][sku]) {
+      salesByMonth[monthKey][sku] = {
+        soldQty: 0,
+        cogs: 0 // Cost of Goods Sold (売上原価)
+      };
+    }
+    
+    salesByMonth[monthKey][sku].soldQty += qty;
+    salesByMonth[monthKey][sku].cogs += variableCost;
+    
+    if (i <= 5) {
+      Logger.log(`MQ行${i}: 日付=${dateValue}, SKU=${sku}, 数量=${qty}, 原価=${variableCost}`);
+    }
+  }
+  
+  Logger.log(`集計完了: ${Object.keys(salesByMonth).length}ヶ月分`);
+  
+  // 各月・各商品の在庫回転率を計算
+  for (const month in inventoryByMonth) {
+    const inventoryData = inventoryByMonth[month];
+    const salesData = salesByMonth[month] || {};
+    
+    Logger.log(`\n月次 ${month} の在庫回転率計算:`);
+    
+    for (const sku in inventoryData) {
+      const avgInventoryQty = inventoryData[sku];
+      const sales = salesData[sku] || { soldQty: 0, cogs: 0 };
+      let product = productMaster[sku];
+
+      if (!product) {
+        Logger.log(`⚠️ 商品マスターに未登録: ${sku}（単価=0で計算）`);
+        product = { name: sku, unitCost: 0 };
+      }
+
+      const unitCost = product.unitCost || 0;
+      const avgInventoryValue = avgInventoryQty * unitCost;
+
+      // 数量ベース在庫回転率 = 販売数量 ÷ 平均在庫数量
+      const qtyTurnover = avgInventoryQty > 0 ? sales.soldQty / avgInventoryQty : 0;
+
+      // 金額ベース在庫回転率 = 売上原価 ÷ 平均在庫金額
+      const valueTurnover = avgInventoryValue > 0 ? sales.cogs / avgInventoryValue : 0;
+
+      Logger.log(`  SKU=${sku}: avgQty=${avgInventoryQty}, unitCost=${unitCost}, avgValue=${avgInventoryValue}, cogs=${sales.cogs}, valueTurnover=${valueTurnover}`);
+
+      // 在庫回転日数（月次なので30日で計算）
+      const qtyTurnoverDays = qtyTurnover > 0 ? 30 / qtyTurnover : 0;
+      const valueTurnoverDays = valueTurnover > 0 ? 30 / valueTurnover : 0;
+
+      results.push({
+        period: month,
+        days: 30,
+        productCode: sku,
+        productName: product.name,
+        startQty: avgInventoryQty,
+        endQty: avgInventoryQty,
+        avgQty: avgInventoryQty,
+        avgValue: avgInventoryValue,
+        soldQty: sales.soldQty,
+        cogs: sales.cogs,
+        qtyTurnover: qtyTurnover,
+        valueTurnover: valueTurnover,
+        qtyTurnoverDays: qtyTurnoverDays,
+        valueTurnoverDays: valueTurnoverDays
+      });
+    }
+  }
+  
+  // 期間でソート
+  results.sort((a, b) => {
+    const periodCompare = a.period.localeCompare(b.period);
+    if (periodCompare !== 0) return periodCompare;
+    return b.valueTurnover - a.valueTurnover; // 金額ベース回転率降順
+  });
+  
+  return results;
+}
+
+/**
+ * 在庫回転率結果を出力
+ */
+function outputInventoryTurnoverResults(results, sheetName) {
+  try {
+    Logger.log('📝 結果出力開始');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(sheetName);
+    
+    // シートが存在しない場合は新規作成
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+      Logger.log('✅ シートを新規作成: ' + sheetName);
+    } else {
+      sheet.clear();
+      Logger.log('✅ 既存シートをクリア: ' + sheetName);
+    }
+    
+    // ヘッダー行を作成
+    const headers = [
+      '期間',
+      '日数',
+      '商品コード',
+      '商品名',
+      '期首在庫数',
+      '期末在庫数',
+      '平均在庫数量',
+      '平均在庫金額',
+      '販売数量',
+      '売上原価',
+      '数量回転率',
+      '金額回転率',
+      '数量回転日数',
+      '金額回転日数'
+    ];
+    
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // ヘッダーの書式設定
+    sheet.getRange(1, 1, 1, headers.length)
+      .setBackground('#4A90E2')
+      .setFontColor('#FFFFFF')
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+    
+    // データ行を作成（★順序を確認）
+    const outputData = results.map(item => [
+      item.period,           // 列1: 期間
+      item.days,             // 列2: 日数
+      item.productCode,      // 列3: 商品コード ★ここが重要
+      item.productName,      // 列4: 商品名
+      item.startQty,         // 列5: 期首在庫数
+      item.endQty,           // 列6: 期末在庫数
+      item.avgQty,           // 列7: 平均在庫数量
+      item.avgValue,         // 列8: 平均在庫金額
+      item.soldQty,          // 列9: 販売数量
+      item.cogs,             // 列10: 売上原価
+      item.qtyTurnover,      // 列11: 数量回転率
+      item.valueTurnover,    // 列12: 金額回転率
+      item.qtyTurnoverDays,  // 列13: 数量回転日数
+      item.valueTurnoverDays // 列14: 金額回転日数
+    ]);
+    
+    // データを出力
+    if (outputData.length > 0) {
+      sheet.getRange(2, 1, outputData.length, headers.length).setValues(outputData);
+      Logger.log(`✅ ${sheetName}: ${outputData.length}件出力`);
+    }
+    
+    // 列幅を調整
+    sheet.setColumnWidth(1, 200); // 期間
+    sheet.setColumnWidth(2, 80);  // 日数
+    sheet.setColumnWidth(3, 150); // 商品コード
+    sheet.setColumnWidth(4, 200); // 商品名
+    sheet.setColumnWidth(5, 100); // 期首在庫数
+    sheet.setColumnWidth(6, 100); // 期末在庫数
+    sheet.setColumnWidth(7, 120); // 平均在庫数量
+    sheet.setColumnWidth(8, 120); // 平均在庫金額
+    sheet.setColumnWidth(9, 100); // 販売数量
+    sheet.setColumnWidth(10, 120); // 売上原価
+    sheet.setColumnWidth(11, 120); // 数量回転率
+    sheet.setColumnWidth(12, 120); // 金額回転率
+    sheet.setColumnWidth(13, 120); // 数量回転日数
+    sheet.setColumnWidth(14, 120); // 金額回転日数
+    
+    // 数値列のフォーマット
+    if (outputData.length > 0) {
+      // 数量列
+      sheet.getRange(2, 5, outputData.length, 3).setNumberFormat('#,##0');
+      sheet.getRange(2, 9, outputData.length, 1).setNumberFormat('#,##0');
+      
+      // 金額列
+      sheet.getRange(2, 8, outputData.length, 1).setNumberFormat('#,##0');
+      sheet.getRange(2, 10, outputData.length, 1).setNumberFormat('#,##0');
+      
+      // 回転率列
+      sheet.getRange(2, 11, outputData.length, 2).setNumberFormat('0.00');
+      
+      // 回転日数列
+      sheet.getRange(2, 13, outputData.length, 2).setNumberFormat('0.0');
+    }
+    
+    // ヘッダー行を固定
+    sheet.setFrozenRows(1);
+    
+    Logger.log('✅ 結果出力完了');
+    
+  } catch (error) {
+    Logger.log('❌ 出力エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+    throw error;
+  }
+}
+
+/**
+ * 期間別在庫回転率の計算（週次用）
+ * @param {Object} inventoryByDate - 日付ごとの在庫データ
+ * @param {Array} mqData - MQ分析データ
+ * @param {Object} productMaster - 商品マスター
+ * @param {number} periodDays - 期間日数（週次=7）
+ */
+function calculateInventoryTurnoverByPeriod(inventoryByDate, mqData, productMaster, periodDays) {
+  const results = [];
+  
+  // 日付を昇順にソート
+  const dates = Object.keys(inventoryByDate).sort();
+  
+  Logger.log(`📅 在庫計測日: ${dates.length}日分`);
+  dates.forEach(date => Logger.log(`  - ${date}`));
+  
+  // 隣接する日付ペアを探す（期間日数±2日の範囲）
+  for (let i = 0; i < dates.length - 1; i++) {
+    const startDate = dates[i];
+    const endDate = dates[i + 1];
+    
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    
+    // 日数差を計算
+    const daysDiff = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+    
+    // 期間日数±2日の範囲内であればペアとみなす（週次なら5〜9日）
+    if (Math.abs(daysDiff - periodDays) <= 2) {
+      Logger.log(`\n📊 期間: ${startDate} 〜 ${endDate} (${daysDiff}日間)`);
+      
+      const startInventory = inventoryByDate[startDate];
+      const endInventory = inventoryByDate[endDate];
+      
+      // 両方の日付に存在する商品のみを対象
+      const commonSkus = Object.keys(startInventory).filter(sku => endInventory[sku] !== undefined);
+      
+      Logger.log(`  対象商品数: ${commonSkus.length}商品`);
+      
+      // この期間の売上データを集計
+      const salesInPeriod = {};
+      
+      for (let j = 1; j < mqData.length; j++) {
+        const row = mqData[j];
+        const dateValue = row[0];
+        const sku = String(row[2] || '').trim();
+        const qty = parseFloat(row[4]) || 0;
+        const variableCost = parseFloat(row[6]) || 0;
+        
+        if (!dateValue || !sku) continue;
+        
+        const dateObj = new Date(dateValue);
+        const dateKey = Utilities.formatDate(dateObj, 'JST', 'yyyy-MM-dd');
+        
+        // 期間内のデータのみ集計
+        if (dateKey >= startDate && dateKey <= endDate) {
+          if (!salesInPeriod[sku]) {
+            salesInPeriod[sku] = {
+              soldQty: 0,
+              cogs: 0
+            };
+          }
+          
+          salesInPeriod[sku].soldQty += qty;
+          salesInPeriod[sku].cogs += variableCost;
+        }
+      }
+      
+      Logger.log(`  販売データ: ${Object.keys(salesInPeriod).length}商品に売上あり`);
+      
+      // 各商品の在庫回転率を計算
+      let calculatedCount = 0;
+      
+      for (const sku of commonSkus) {
+        const product = productMaster[sku];
+        
+        if (!product) {
+          Logger.log(`  ⚠️ 商品マスター未登録: ${sku}`);
+          continue;
+        }
+        
+        const startQty = startInventory[sku] || 0;
+        const endQty = endInventory[sku] || 0;
+        const avgInventoryQty = (startQty + endQty) / 2;
+        
+        const unitCost = product.unitCost;
+        const avgInventoryValue = avgInventoryQty * unitCost;
+        
+        const sales = salesInPeriod[sku] || { soldQty: 0, cogs: 0 };
+        
+        // 数量ベース在庫回転率 = 販売数量 ÷ 平均在庫数量
+        const qtyTurnover = avgInventoryQty > 0 ? sales.soldQty / avgInventoryQty : 0;
+        
+        // 金額ベース在庫回転率 = 売上原価 ÷ 平均在庫金額
+        const valueTurnover = avgInventoryValue > 0 ? sales.cogs / avgInventoryValue : 0;
+        
+        // 在庫回転日数
+        const qtyTurnoverDays = qtyTurnover > 0 ? periodDays / qtyTurnover : 0;
+        const valueTurnoverDays = valueTurnover > 0 ? periodDays / valueTurnover : 0;
+        
+        // 販売実績があるか、在庫変動がある商品のみ出力
+        if (sales.soldQty > 0 || Math.abs(startQty - endQty) > 0) {
+          results.push({
+            period: `${startDate}〜${endDate}`,
+            sku: sku,
+            productName: product.name,
+            avgInventoryQty: avgInventoryQty,
+            avgInventoryValue: avgInventoryValue,
+            soldQty: sales.soldQty,
+            cogs: sales.cogs,
+            qtyTurnover: qtyTurnover,
+            valueTurnover: valueTurnover,
+            qtyTurnoverDays: qtyTurnoverDays,
+            valueTurnoverDays: valueTurnoverDays
+          });
+          
+          calculatedCount++;
+        }
+      }
+      
+      Logger.log(`  ✅ 計算完了: ${calculatedCount}商品`);
+    }
+  }
+  
+  // 金額ベース回転率の降順でソート
+  results.sort((a, b) => b.valueTurnover - a.valueTurnover);
+  
+  Logger.log(`\n📊 最終結果: ${results.length}件`);
+  
+  return results;
+}
+
+/**
+ * 在庫データシートの初期化（改良版）
+ */
+function initializeInventoryDataSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    Logger.log('✅ 在庫データシートを新規作成');
+  }
+  
+  // ヘッダー行を設定
+  sheet.clear();
+  sheet.appendRow([
+    '計測日',
+    '期間タイプ',
+    '商品コード',
+    '商品名',
+    '在庫数',
+    '備考'
+  ]);
+  
+  // ヘッダー書式
+  const headerRange = sheet.getRange(1, 1, 1, 6);
+  headerRange.setBackground('#4A90E2')
+            .setFontColor('#FFFFFF')
+            .setFontWeight('bold')
+            .setHorizontalAlignment('center');
+  
+  // サンプルデータを追加（週次の例）
+  sheet.appendRow([
+    new Date('2025-12-28'),
+    '週次',
+    'eim-01-ph-01',
+    'サンプル商品1',
+    100,
+    '先週土曜日'
+  ]);
+  
+  sheet.appendRow([
+    new Date('2025-12-28'),
+    '週次',
+    'eim-01-ph-02',
+    'サンプル商品2',
+    50,
+    '先週土曜日'
+  ]);
+  
+  sheet.appendRow([
+    new Date('2026-01-05'),
+    '週次',
+    'eim-01-ph-01',
+    'サンプル商品1',
+    90,
+    '今週日曜日'
+  ]);
+  
+  sheet.appendRow([
+    new Date('2026-01-05'),
+    '週次',
+    'eim-01-ph-02',
+    'サンプル商品2',
+    45,
+    '今週日曜日'
+  ]);
+  
+  // 月次データのサンプル
+  sheet.appendRow([
+    new Date('2025-12-31'),
+    '月次',
+    'eim-01-ph-01',
+    'サンプル商品1',
+    88,
+    '12月末'
+  ]);
+  
+  sheet.appendRow([
+    new Date('2025-12-31'),
+    '月次',
+    'eim-01-ph-02',
+    'サンプル商品2',
+    44,
+    '12月末'
+  ]);
+  
+  // 列幅調整
+  sheet.setColumnWidth(1, 120); // 計測日
+  sheet.setColumnWidth(2, 100); // 期間タイプ
+  sheet.setColumnWidth(3, 150); // 商品コード
+  sheet.setColumnWidth(4, 200); // 商品名
+  sheet.setColumnWidth(5, 100); // 在庫数
+  sheet.setColumnWidth(6, 250); // 備考
+  
+  // 日付列のフォーマット
+  sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).setNumberFormat('yyyy/mm/dd');
+  
+  // 固定行
+  sheet.setFrozenRows(1);
+  
+  Logger.log('✅ 在庫データシートの初期化完了');
+  Logger.log('📊 サンプルデータ: 6行を追加');
+  Logger.log('  週次: 2025/12/28 と 2026/01/05');
+  Logger.log('  月次: 2025/12/31');
+  
+  // トースト通知
+  try {
+    ss.toast(
+      '在庫データシートを作成しました。\n\n' +
+      '期間タイプ列に「週次」または「月次」を入力してください。\n' +
+      '週次データは同じ曜日のペアで計算されます。',
+      '✅ 初期化完了',
+      8
+    );
+  } catch (e) {
+    Logger.log('⚠️ トースト通知スキップ');
+  }
+  
+  return sheet;
+}
+
+/**
+ * 日付ペアによる週次在庫回転率計算
+ */
+function calculateWeeklyTurnoverByDatePairs(inventoryByDate, mqData, productMaster) {
+  const results = [];
+  const dates = Object.keys(inventoryByDate).sort();
+  
+  // 隣接する日付ペアで計算
+  for (let i = 0; i < dates.length - 1; i++) {
+    const startDate = dates[i];
+    const endDate = dates[i + 1];
+    
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    
+    // 日数差を計算
+    const daysDiff = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+    
+    Logger.log(`\n📊 期間: ${startDate} 〜 ${endDate} (${daysDiff}日間)`);
+    
+    const startInventory = inventoryByDate[startDate];
+    const endInventory = inventoryByDate[endDate];
+    
+    // 両方の日付に存在する商品のみを対象
+    const commonSkus = Object.keys(startInventory).filter(sku => endInventory[sku] !== undefined);
+    
+    Logger.log(`  対象商品数: ${commonSkus.length}商品`);
+    
+    // この期間の売上データを集計
+    const salesInPeriod = {};
+    
+    for (let j = 1; j < mqData.length; j++) {
+      const row = mqData[j];
+      const dateValue = row[0];
+      const sku = String(row[2] || '').trim();
+      const qty = parseFloat(row[4]) || 0;
+      const variableCost = parseFloat(row[6]) || 0;
+      
+      if (!dateValue || !sku) continue;
+      
+      const dateObj = new Date(dateValue);
+      const dateKey = Utilities.formatDate(dateObj, 'JST', 'yyyy-MM-dd');
+      
+      // 期間内のデータのみ集計（開始日は含まない、終了日は含む）
+      if (dateKey > startDate && dateKey <= endDate) {
+        if (!salesInPeriod[sku]) {
+          salesInPeriod[sku] = {
+            soldQty: 0,
+            cogs: 0
+          };
+        }
+        
+        salesInPeriod[sku].soldQty += qty;
+        salesInPeriod[sku].cogs += variableCost;
+      }
+    }
+    
+    Logger.log(`  期間内売上データ: ${Object.keys(salesInPeriod).length}商品`);
+    
+    // サンプルログ（最初の3商品）
+    let sampleCount = 0;
+    for (const sku in salesInPeriod) {
+      if (sampleCount < 3) {
+        Logger.log(`    ${sku}: 販売数量=${salesInPeriod[sku].soldQty}, 売上原価=${salesInPeriod[sku].cogs}`);
+        sampleCount++;
+      }
+    }
+    
+    // 各商品の在庫回転率を計算
+    let calculatedCount = 0;
+    
+    for (const sku of commonSkus) {
+      const product = productMaster[sku];
+      
+      if (!product) {
+        Logger.log(`  ⚠️ 商品マスター未登録: ${sku}`);
+        continue;
+      }
+      
+      const startQty = startInventory[sku] || 0;
+      const endQty = endInventory[sku] || 0;
+      const avgInventoryQty = (startQty + endQty) / 2;
+      
+      const unitCost = product.unitCost;
+      const avgInventoryValue = avgInventoryQty * unitCost;
+      
+      const sales = salesInPeriod[sku] || { soldQty: 0, cogs: 0 };
+      
+      // 数量ベース在庫回転率 = 販売数量 ÷ 平均在庫数量
+      const qtyTurnover = avgInventoryQty > 0 ? sales.soldQty / avgInventoryQty : 0;
+      
+      // 金額ベース在庫回転率 = 売上原価 ÷ 平均在庫金額
+      const valueTurnover = avgInventoryValue > 0 ? sales.cogs / avgInventoryValue : 0;
+      
+      // 在庫回転日数
+      const qtyTurnoverDays = qtyTurnover > 0 ? daysDiff / qtyTurnover : 0;
+      const valueTurnoverDays = valueTurnover > 0 ? daysDiff / valueTurnover : 0;
+      
+      results.push({
+        period: `${startDate}〜${endDate}`,
+        periodDays: daysDiff,
+        sku: sku,
+        productName: product.name,
+        startInventoryQty: startQty,
+        endInventoryQty: endQty,
+        avgInventoryQty: avgInventoryQty,
+        avgInventoryValue: avgInventoryValue,
+        soldQty: sales.soldQty,
+        cogs: sales.cogs,
+        qtyTurnover: qtyTurnover,
+        valueTurnover: valueTurnover,
+        qtyTurnoverDays: qtyTurnoverDays,
+        valueTurnoverDays: valueTurnoverDays
+      });
+      
+      calculatedCount++;
+    }
+    
+    Logger.log(`  ✅ 計算完了: ${calculatedCount}商品`);
+  }
+  
+  // 金額ベース回転率の降順でソート
+  results.sort((a, b) => b.valueTurnover - a.valueTurnover);
+  
+  Logger.log(`\n📊 最終結果: ${results.length}件`);
+  
+  return results;
+}
+
+// ======================================================================
+// 在庫統合システム（簡易版）- 設定
+// ======================================================================
+
+/**
+ * MQ_CONFIG に在庫統合関連のシート名を追加
+ * 既存の MQ_CONFIG.SHEETS に以下を追加：
+ */
+// INVENTORY_INPUT: '在庫データ入力',
+// INVENTORY_CONSOLIDATED: '統合在庫データ'
+
+// ======================================================================
+// 在庫統合システム - 初期化
+// ======================================================================
+
+/**
+ * 在庫データ入力シートを初期化（簡易版）
+ */
+function initializeInventoryInputSheet() {
+  try {
+    Logger.log('=== 在庫データ入力シート初期化開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_INPUT);
+    
+    // シートが存在しない場合は新規作成
+    if (!sheet) {
+      sheet = ss.insertSheet(MQ_CONFIG.SHEETS.INVENTORY_INPUT);
+      Logger.log('✅ 在庫データ入力シートを新規作成');
+    } else {
+      sheet.clear();
+      Logger.log('✅ 既存シートをクリア');
+    }
+    
+    // ヘッダー行を設定（商品コードと在庫数のみ）
+    const headers = ['商品コード', '在庫数'];
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // ヘッダーの書式設定
+    sheet.getRange(1, 1, 1, headers.length)
+      .setBackground('#4A90E2')
+      .setFontColor('#FFFFFF')
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+    
+    // 説明文を追加（右側）
+    sheet.getRange(1, 4).setValue('【使い方】');
+    sheet.getRange(2, 4).setValue('1. 各拠点（NextEngine、Amazon、楽天、中国倉庫）の');
+    sheet.getRange(3, 4).setValue('   在庫データを商品コード・在庫数の2列で貼り付け');
+    sheet.getRange(4, 4).setValue('2. 同じ商品コードが複数あっても問題ありません');
+    sheet.getRange(5, 4).setValue('3. 「在庫統合実行」を実行すると、商品コード別に合算されます');
+    sheet.getRange(6, 4).setValue('4. 出力された「統合在庫データ」を「在庫データ」シートにコピペ');
+    
+    // サンプルデータを追加
+    const sampleData = [
+      ['eim-01-ph-01', 50],
+      ['eim-01-ph-02', 40],
+      ['eim-01-ph-01', 30],  // 同じ商品コードが複数回登場
+      ['eim-01-ph-03', 20],
+      ['eim-01-ph-01', 100], // さらに同じ商品コード
+      ['eim-01-ph-02', 25]
+    ];
+    
+    sheet.getRange(2, 1, sampleData.length, 2).setValues(sampleData);
+    
+    // 列幅を調整
+    sheet.setColumnWidth(1, 150); // 商品コード
+    sheet.setColumnWidth(2, 100); // 在庫数
+    sheet.setColumnWidth(4, 400); // 説明文
+    
+    // ヘッダー行を固定
+    sheet.setFrozenRows(1);
+    
+    Logger.log('✅ 在庫データ入力シートの初期化完了');
+    Logger.log(`サンプルデータ: ${sampleData.length}行を追加`);
+    
+    // トースト通知
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      '在庫データ入力シートを初期化しました。サンプルデータを削除して、各拠点の在庫データを貼り付けてください。',
+      '初期化完了',
+      5
+    );
+    
+    return sheet;
+    
+  } catch (error) {
+    Logger.log('❌ エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      'エラーが発生しました: ' + error.message,
+      'エラー',
+      10
+    );
+    
+    throw error;
+  }
+}
+
+// ======================================================================
+// 在庫統合システム - メイン処理
+// ======================================================================
+
+/**
+ * 複数拠点の在庫データを統合（簡易版）
+ */
+function consolidateInventory() {
+  try {
+    const startTime = Date.now();
+    Logger.log('=== 在庫統合処理開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const inputSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_INPUT);
+    
+    if (!inputSheet) {
+      throw new Error('在庫データ入力シートが見つかりません。先に初期化を実行してください。');
+    }
+    
+    // 計測日と期間タイプを入力ダイアログで取得
+    const ui = SpreadsheetApp.getUi();
+    
+    // 計測日を入力
+    const dateResponse = ui.prompt(
+      '計測日を入力',
+      '計測日を入力してください（例: 2026/01/11）',
+      ui.ButtonSet.OK_CANCEL
+    );
+    
+    if (dateResponse.getSelectedButton() !== ui.Button.OK) {
+      Logger.log('❌ ユーザーがキャンセルしました');
+      return;
+    }
+    
+    const dateStr = dateResponse.getResponseText().trim();
+    
+    // 期間タイプを選択
+    const periodResponse = ui.prompt(
+      '期間タイプを入力',
+      '期間タイプを入力してください（例: 週次 or 月次）',
+      ui.ButtonSet.OK_CANCEL
+    );
+    
+    if (periodResponse.getSelectedButton() !== ui.Button.OK) {
+      Logger.log('❌ ユーザーがキャンセルしました');
+      return;
+    }
+    
+    const periodType = periodResponse.getResponseText().trim();
+    
+    Logger.log(`📅 計測日: ${dateStr}`);
+    Logger.log(`📊 期間タイプ: ${periodType}`);
+    
+    // データ読み込み
+    const data = inputSheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    Logger.log(`📊 読み込みデータ: ${rows.length}行`);
+    
+    if (rows.length === 0) {
+      throw new Error('在庫データが入力されていません。');
+    }
+    
+    // 商品マスターを読み込み（商品名取得用）
+    const productMaster = loadProductMaster();
+    
+    // データを集計（商品コード別に合算）
+    const consolidated = {};
+    
+    rows.forEach((row, index) => {
+      const productCode = String(row[0]).trim();
+      const quantity = Number(row[1]) || 0;
+      
+      // 空行をスキップ
+      if (!productCode || productCode === '' || productCode === '商品コード') {
+        return;
+      }
+      
+      // 商品コード別に合算
+      if (!consolidated[productCode]) {
+        consolidated[productCode] = {
+          productCode: productCode,
+          quantity: 0
+        };
+      }
+      
+      consolidated[productCode].quantity += quantity;
+      
+      Logger.log(`${index + 1}行目: ${productCode} | ${quantity}個 → 累計: ${consolidated[productCode].quantity}個`);
+    });
+    
+    Logger.log(`✅ 集計完了: ${Object.keys(consolidated).length}商品`);
+    
+    // 統合在庫データシートに出力
+    outputConsolidatedInventory(consolidated, productMaster, dateStr, periodType);
+    
+    const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
+    Logger.log(`=== 在庫統合処理完了: ${elapsedTime}秒 ===`);
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      `在庫統合完了: ${Object.keys(consolidated).length}商品 / 処理時間: ${elapsedTime}秒\n\n「統合在庫データ」シートの内容を「在庫データ」シートにコピー＆ペーストしてください。`,
+      '統合完了',
+      10
+    );
+    
+    return {
+      success: true,
+      count: Object.keys(consolidated).length,
+      elapsedTime: elapsedTime
+    };
+    
+  } catch (error) {
+    Logger.log('❌ エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+    
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      'エラーが発生しました: ' + error.message,
+      'エラー',
+      10
+    );
+    
+    throw error;
+  }
+}
+
+/**
+ * 統合在庫データをシートに出力
+ */
+function outputConsolidatedInventory(consolidated, productMaster, dateStr, periodType) {
+  try {
+    Logger.log('📝 統合在庫データ出力開始');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_CONSOLIDATED);
+    
+    // シートが存在しない場合は新規作成
+    if (!sheet) {
+      sheet = ss.insertSheet(MQ_CONFIG.SHEETS.INVENTORY_CONSOLIDATED);
+      Logger.log('✅ 統合在庫データシートを新規作成');
+    } else {
+      sheet.clear();
+      Logger.log('✅ 既存シートをクリア');
+    }
+    
+    // ヘッダー行を作成
+    const headers = ['計測日', '期間タイプ', '商品コード', '商品名', '在庫数'];
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // ヘッダーの書式設定
+    sheet.getRange(1, 1, 1, headers.length)
+      .setBackground('#4A90E2')
+      .setFontColor('#FFFFFF')
+      .setFontWeight('bold')
+      .setHorizontalAlignment('center');
+    
+    // 説明文を追加
+    sheet.getRange(1, 7).setValue('【次のステップ】');
+    sheet.getRange(2, 7).setValue('このデータを全選択してコピー（ヘッダー行を除く）');
+    sheet.getRange(3, 7).setValue('↓');
+    sheet.getRange(4, 7).setValue('「在庫データ」シートの末尾に貼り付け');
+    sheet.getRange(5, 7).setValue('↓');
+    sheet.getRange(6, 7).setValue('「週次在庫回転率計算」または「月次在庫回転率計算」を実行');
+    
+    // データ行を作成
+    const outputData = [];
+    
+    // 商品コード順にソート
+    const sortedKeys = Object.keys(consolidated).sort();
+    
+    sortedKeys.forEach(productCode => {
+      const item = consolidated[productCode];
+      
+      // 商品マスターから商品名を取得
+      const productName = productMaster[productCode]?.name || productCode;
+      
+      const row = [
+        dateStr,              // 計測日
+        periodType,           // 期間タイプ
+        item.productCode,     // 商品コード
+        productName,          // 商品名
+        item.quantity         // 在庫数
+      ];
+      
+      outputData.push(row);
+    });
+    
+    // データを出力
+    if (outputData.length > 0) {
+      sheet.getRange(2, 1, outputData.length, headers.length).setValues(outputData);
+      Logger.log(`✅ ${outputData.length}行のデータを出力`);
+    }
+    
+    // 列幅を調整
+    sheet.setColumnWidth(1, 120);  // 計測日
+    sheet.setColumnWidth(2, 100);  // 期間タイプ
+    sheet.setColumnWidth(3, 150);  // 商品コード
+    sheet.setColumnWidth(4, 200);  // 商品名
+    sheet.setColumnWidth(5, 100);  // 在庫数
+    sheet.setColumnWidth(7, 400);  // 説明文
+    
+    // 在庫数列のフォーマット
+    sheet.getRange(2, 5, outputData.length, 1).setNumberFormat('#,##0');
+    
+    // 在庫数列を太字に
+    sheet.getRange(2, 5, outputData.length, 1)
+      .setFontWeight('bold')
+      .setBackground('#E8F4F8');
+    
+    // ヘッダー行を固定
+    sheet.setFrozenRows(1);
+    
+    // データ範囲を選択状態にする（コピーしやすいように）
+    sheet.setActiveRange(sheet.getRange(2, 1, outputData.length, headers.length));
+    
+    Logger.log('✅ 統合在庫データ出力完了');
+    
+  } catch (error) {
+    Logger.log('❌ 出力エラー: ' + error.message);
+    throw error;
+  }
+}
+
+/**
+ * 商品マスターを読み込み
+ */
+function loadProductMaster() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+    
+    if (!sheet) {
+      Logger.log('⚠️ 商品マスターシートが見つかりません');
+      return {};
+    }
+    
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    const colProductCode = headers.indexOf('商品コード');
+    const colProductName = headers.indexOf('商品名');
+    const colCost = headers.indexOf('V(原価)');  // ★変更: 原価 → V(原価)
+    
+    if (colProductCode < 0 || colProductName < 0 || colCost < 0) {
+      Logger.log('⚠️ 商品マスターシートの列構成が不正です');
+      Logger.log(`列: 商品コード=${colProductCode}, 商品名=${colProductName}, V(原価)=${colCost}`);
+      return {};
+    }
+    
+    const productMaster = {};
+    
+    rows.forEach(row => {
+      const productCode = row[colProductCode];
+      const productName = row[colProductName];
+      const cost = Number(row[colCost]) || 0;
+      
+      if (productCode) {
+        productMaster[productCode] = {
+          name: productName,
+          unitCost: cost  // ★修正: cost → unitCost
+        };
+      }
+    });
+    
+    Logger.log(`✅ 商品マスター読込: ${Object.keys(productMaster).length}商品`);
+    
+    return productMaster;
+    
+  } catch (error) {
+    Logger.log('⚠️ 商品マスター読込エラー: ' + error.message);
+    return {};
+  }
+}
+
+/**
+ * 在庫データと週次計算の診断
+ */
+function diagnoseWeeklyInventoryIssue() {
+  try {
+    Logger.log('=== 在庫データ診断開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const inventorySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    
+    if (!inventorySheet) {
+      Logger.log('❌ 在庫データシートが見つかりません');
+      return;
+    }
+    
+    Logger.log('✅ 在庫データシートを発見');
+    
+    // データ読み込み
+    const data = inventorySheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    Logger.log(`\n【ヘッダー情報】`);
+    Logger.log(`列数: ${headers.length}`);
+    Logger.log(`ヘッダー: [${headers.join(', ')}]`);
+    
+    Logger.log(`\n【データ情報】`);
+    Logger.log(`データ行数: ${rows.length}行`);
+    
+    if (rows.length === 0) {
+      Logger.log('❌ データが入力されていません');
+      return;
+    }
+    
+    // 列インデックスを取得
+    const colDate = headers.indexOf('計測日');
+    const colPeriodType = headers.indexOf('期間タイプ');
+    const colProductCode = headers.indexOf('商品コード');
+    const colProductName = headers.indexOf('商品名');
+    const colQuantity = headers.indexOf('在庫数');
+    
+    Logger.log(`\n【列インデックス】`);
+    Logger.log(`計測日: ${colDate}列目`);
+    Logger.log(`期間タイプ: ${colPeriodType}列目`);
+    Logger.log(`商品コード: ${colProductCode}列目`);
+    Logger.log(`商品名: ${colProductName}列目`);
+    Logger.log(`在庫数: ${colQuantity}列目`);
+    
+    // 最初の5行のサンプルデータを表示
+    Logger.log(`\n【サンプルデータ（最初の5行）】`);
+    for (let i = 0; i < Math.min(5, rows.length); i++) {
+      const row = rows[i];
+      Logger.log(`行${i + 2}:`);
+      Logger.log(`  計測日: ${row[colDate]} (型: ${typeof row[colDate]})`);
+      Logger.log(`  期間タイプ: "${row[colPeriodType]}" (型: ${typeof row[colPeriodType]})`);
+      Logger.log(`  商品コード: "${row[colProductCode]}" (型: ${typeof row[colProductCode]})`);
+      Logger.log(`  商品名: "${row[colProductName]}" (型: ${typeof row[colProductName]})`);
+      Logger.log(`  在庫数: ${row[colQuantity]} (型: ${typeof row[colQuantity]})`);
+    }
+    
+    // 週次データを抽出
+    Logger.log(`\n【週次データの抽出】`);
+    let weeklyCount = 0;
+    let monthlyCount = 0;
+    let otherCount = 0;
+    let emptyCount = 0;
+    
+    const dates = new Set();
+    const products = new Set();
+    
+    rows.forEach((row, index) => {
+      const periodType = String(row[colPeriodType]).trim();
+      const productCode = String(row[colProductCode]).trim();
+      const date = row[colDate];
+      
+      if (!productCode || productCode === '') {
+        emptyCount++;
+        return;
+      }
+      
+      if (periodType === '週次') {
+        weeklyCount++;
+        dates.add(Utilities.formatDate(new Date(date), Session.getScriptTimeZone(), 'yyyy-MM-dd'));
+        products.add(productCode);
+      } else if (periodType === '月次') {
+        monthlyCount++;
+      } else if (periodType === '') {
+        otherCount++;
+        Logger.log(`行${index + 2}: 期間タイプが空白 (商品コード: ${productCode})`);
+      } else {
+        otherCount++;
+        Logger.log(`行${index + 2}: 期間タイプが「${periodType}」 (商品コード: ${productCode})`);
+      }
+    });
+    
+    Logger.log(`\n【集計結果】`);
+    Logger.log(`週次データ: ${weeklyCount}行`);
+    Logger.log(`月次データ: ${monthlyCount}行`);
+    Logger.log(`その他/空白: ${otherCount}行`);
+    Logger.log(`空行: ${emptyCount}行`);
+    Logger.log(`合計: ${rows.length}行`);
+    
+    Logger.log(`\n【週次データの詳細】`);
+    Logger.log(`計測日の種類: ${dates.size}日分`);
+    Logger.log(`計測日一覧: [${Array.from(dates).sort().join(', ')}]`);
+    Logger.log(`商品の種類: ${products.size}商品`);
+    
+    if (weeklyCount === 0) {
+      Logger.log(`\n❌ 【問題発見】週次データが0件です！`);
+      Logger.log(`原因候補:`);
+      Logger.log(`1. 期間タイプ列に「週次」と入力されていない`);
+      Logger.log(`2. 期間タイプ列の前後にスペースが入っている`);
+      Logger.log(`3. 全角/半角が混在している`);
+    } else if (dates.size < 2) {
+      Logger.log(`\n⚠️ 【問題発見】計測日が${dates.size}日分しかありません`);
+      Logger.log(`週次回転率の計算には最低2日分の計測日が必要です`);
+    } else if (products.size === 0) {
+      Logger.log(`\n❌ 【問題発見】商品コードが取得できていません`);
+    } else {
+      Logger.log(`\n✅ データは正常です。週次計算が可能な状態です。`);
+    }
+    
+    // MQ_CONFIG.SHEETS の確認
+    Logger.log(`\n【MQ_CONFIG.SHEETS の確認】`);
+    Logger.log(`INVENTORY_DATA: "${MQ_CONFIG.SHEETS.INVENTORY_DATA}"`);
+    Logger.log(`WEEKLY_INVENTORY_TURNOVER: "${MQ_CONFIG.SHEETS.WEEKLY_INVENTORY_TURNOVER}"`);
+    
+    Logger.log('\n=== 診断完了 ===');
+    
+  } catch (error) {
+    Logger.log('❌ 診断エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+  }
+}
+
+/**
+ * シート構造を診断
+ */
+function diagnoseSheetStructure() {
+  try {
+    Logger.log('=== シート構造診断開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 日次決算シートの診断
+    Logger.log('\n【1. 日次決算シート】');
+    const dailySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.DAILY_SETTLEMENT);
+    
+    if (!dailySheet) {
+      Logger.log(`❌ シートが見つかりません: "${MQ_CONFIG.SHEETS.DAILY_SETTLEMENT}"`);
+    } else {
+      Logger.log(`✅ シートを発見: "${MQ_CONFIG.SHEETS.DAILY_SETTLEMENT}"`);
+      const dailyData = dailySheet.getDataRange().getValues();
+      const dailyHeaders = dailyData[0];
+      Logger.log(`列数: ${dailyHeaders.length}`);
+      Logger.log(`ヘッダー行:`);
+      dailyHeaders.forEach((header, index) => {
+        Logger.log(`  列${index}: "${header}"`);
+      });
+      Logger.log(`\nデータ行数: ${dailyData.length - 1}行`);
+    }
+    
+    // 商品マスターシートの診断
+    Logger.log('\n【2. 商品マスターシート】');
+    const productSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+    
+    if (!productSheet) {
+      Logger.log(`❌ シートが見つかりません: "${MQ_CONFIG.SHEETS.PRODUCT_MASTER}"`);
+    } else {
+      Logger.log(`✅ シートを発見: "${MQ_CONFIG.SHEETS.PRODUCT_MASTER}"`);
+      const productData = productSheet.getDataRange().getValues();
+      const productHeaders = productData[0];
+      Logger.log(`列数: ${productHeaders.length}`);
+      Logger.log(`ヘッダー行:`);
+      productHeaders.forEach((header, index) => {
+        Logger.log(`  列${index}: "${header}"`);
+      });
+      Logger.log(`\nデータ行数: ${productData.length - 1}行`);
+      
+      // サンプルデータを表示
+      if (productData.length > 1) {
+        Logger.log(`\nサンプルデータ（2行目）:`);
+        productData[1].forEach((cell, index) => {
+          Logger.log(`  列${index}（${productHeaders[index]}）: "${cell}"`);
+        });
+      }
+    }
+    
+    // MQ_CONFIG.SHEETS の確認
+    Logger.log('\n【3. MQ_CONFIG.SHEETS の設定】');
+    Logger.log(`DAILY_SETTLEMENT: "${MQ_CONFIG.SHEETS.DAILY_SETTLEMENT}"`);
+    Logger.log(`PRODUCT_MASTER: "${MQ_CONFIG.SHEETS.PRODUCT_MASTER}"`);
+    
+    Logger.log('\n=== 診断完了 ===');
+    
+  } catch (error) {
+    Logger.log('❌ 診断エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+  }
+}
+
+/**
+ * 商品コード列を含むシートを探す
+ */
+function findProductCodeSheets() {
+  try {
+    Logger.log('=== 商品コード列を含むシート検索 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheets = ss.getSheets();
+    
+    Logger.log(`\n総シート数: ${sheets.length}`);
+    
+    const productCodeSheets = [];
+    
+    sheets.forEach(sheet => {
+      const sheetName = sheet.getName();
+      const data = sheet.getDataRange().getValues();
+      
+      if (data.length === 0) {
+        return;
+      }
+      
+      const headers = data[0];
+      const hasProductCode = headers.some(h => 
+        String(h).includes('商品コード') || 
+        String(h).includes('SKU') || 
+        String(h).includes('品番')
+      );
+      
+      if (hasProductCode) {
+        productCodeSheets.push({
+          name: sheetName,
+          headers: headers,
+          rowCount: data.length - 1
+        });
+        
+        Logger.log(`\n✅ "${sheetName}"`);
+        Logger.log(`   データ行数: ${data.length - 1}行`);
+        Logger.log(`   ヘッダー: [${headers.join(', ')}]`);
+      }
+    });
+    
+    Logger.log(`\n=== 検索完了: ${productCodeSheets.length}シート ===`);
+    
+    if (productCodeSheets.length === 0) {
+      Logger.log('\n❌ 商品コード列を含むシートが見つかりませんでした');
+    } else {
+      Logger.log('\n【推奨シート】');
+      productCodeSheets.forEach(s => {
+        Logger.log(`- ${s.name} (${s.rowCount}行)`);
+      });
+    }
+    
+  } catch (error) {
+    Logger.log('❌ エラー: ' + error.message);
+  }
+}
+
+/**
+ * 在庫データとMQ分析の商品コード照合
+ */
+function diagnoseProductCodeMatching() {
+  try {
+    Logger.log('=== 商品コード照合診断開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 在庫データから商品コードを取得
+    Logger.log('\n【1. 在庫データ（週次のみ）】');
+    const inventorySheet = ss.getSheetByName('在庫データ');
+    const inventoryData = inventorySheet.getDataRange().getValues();
+    const inventoryHeaders = inventoryData[0];
+    
+    const colDate = inventoryHeaders.indexOf('計測日');
+    const colPeriodType = inventoryHeaders.indexOf('期間タイプ');
+    const colProductCode = inventoryHeaders.indexOf('商品コード');
+    const colProductName = inventoryHeaders.indexOf('商品名');
+    const colQuantity = inventoryHeaders.indexOf('在庫数');
+    
+    const inventoryCodes = new Set();
+    const sampleInventory = [];
+    
+    inventoryData.slice(1).forEach((row, index) => {
+      if (row[colPeriodType] === '週次' && row[colProductCode]) {
+        inventoryCodes.add(String(row[colProductCode]).trim());
+        
+        if (sampleInventory.length < 5) {
+          sampleInventory.push({
+            code: String(row[colProductCode]).trim(),
+            name: row[colProductName],
+            qty: row[colQuantity]
+          });
+        }
+      }
+    });
+    
+    Logger.log(`在庫データの商品数: ${inventoryCodes.size}商品`);
+    Logger.log(`サンプル（最初の5商品）:`);
+    sampleInventory.forEach(item => {
+      Logger.log(`  商品コード: "${item.code}" | 商品名: "${item.name}" | 在庫数: ${item.qty}`);
+    });
+    
+    // MQ分析から商品コードを取得
+    Logger.log('\n【2. MQ分析データ】');
+    const mqSheet = ss.getSheetByName('MQ分析');
+    const mqData = mqSheet.getDataRange().getValues();
+    const mqHeaders = mqData[0];
+    
+    const mqColProductCode = mqHeaders.indexOf('商品コード');
+    const mqColProductName = mqHeaders.indexOf('商品名');
+    
+    const mqCodes = new Set();
+    const sampleMQ = [];
+    
+    mqData.slice(1).forEach((row, index) => {
+      if (row[mqColProductCode]) {
+        mqCodes.add(String(row[mqColProductCode]).trim());
+        
+        if (sampleMQ.length < 5) {
+          sampleMQ.push({
+            code: String(row[mqColProductCode]).trim(),
+            name: row[mqColProductName]
+          });
+        }
+      }
+    });
+    
+    Logger.log(`MQ分析の商品数: ${mqCodes.size}商品`);
+    Logger.log(`サンプル（最初の5商品）:`);
+    sampleMQ.forEach(item => {
+      Logger.log(`  商品コード: "${item.code}" | 商品名: "${item.name}"`);
+    });
+    
+    // 照合
+    Logger.log('\n【3. 照合結果】');
+    
+    // 在庫データにあってMQ分析にない商品
+    const onlyInInventory = [...inventoryCodes].filter(code => !mqCodes.has(code));
+    Logger.log(`在庫データのみに存在: ${onlyInInventory.length}商品`);
+    if (onlyInInventory.length > 0 && onlyInInventory.length <= 10) {
+      Logger.log(`  商品コード: [${onlyInInventory.join(', ')}]`);
+    }
+    
+    // MQ分析にあって在庫データにない商品
+    const onlyInMQ = [...mqCodes].filter(code => !inventoryCodes.has(code));
+    Logger.log(`MQ分析のみに存在: ${onlyInMQ.length}商品`);
+    if (onlyInMQ.length > 0 && onlyInMQ.length <= 10) {
+      Logger.log(`  商品コード: [${onlyInMQ.join(', ')}]`);
+    }
+    
+    // 両方に存在する商品
+    const common = [...inventoryCodes].filter(code => mqCodes.has(code));
+    Logger.log(`両方に存在: ${common.length}商品`);
+    
+    // 具体的な例を確認
+    Logger.log('\n【4. 具体例の詳細確認】');
+    const testCode1 = sampleInventory[0]?.code;
+    if (testCode1) {
+      Logger.log(`\nテストケース1: "${testCode1}"`);
+      Logger.log(`  在庫データに存在: ${inventoryCodes.has(testCode1) ? 'YES' : 'NO'}`);
+      Logger.log(`  MQ分析に存在: ${mqCodes.has(testCode1) ? 'YES' : 'NO'}`);
+      Logger.log(`  文字列長: ${testCode1.length}`);
+      Logger.log(`  文字コード: [${Array.from(testCode1).map(c => c.charCodeAt(0)).join(', ')}]`);
+    }
+    
+    Logger.log('\n=== 診断完了 ===');
+    
+  } catch (error) {
+    Logger.log('❌ 診断エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+  }
+}
+
+/**
+ * MQ会計システムのデータ整合性診断
+ */
+function diagnoseMQSystemIntegrity() {
+  try {
+    Logger.log('=== MQ会計システム整合性診断開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 1. 日次決算シート
+    Logger.log('\n【1. 日次決算シート】');
+    const dailySheet = ss.getSheetByName('日次決算');
+    if (dailySheet) {
+      const dailyData = dailySheet.getDataRange().getValues();
+      const dailyHeaders = dailyData[0];
+      Logger.log(`ヘッダー: [${dailyHeaders.join(', ')}]`);
+      Logger.log(`データ行数: ${dailyData.length - 1}行`);
+      
+      // 最新行をチェック
+      const lastRow = dailyData[dailyData.length - 1];
+      Logger.log(`最終行（生データ）:`);
+      lastRow.forEach((cell, index) => {
+        const cellType = typeof cell;
+        const cellValue = cell;
+        Logger.log(`  列${index}（${dailyHeaders[index]}）: ${cellValue} (型: ${cellType})`);
+      });
+    }
+    
+    // 2. 月次累積分析シート
+    Logger.log('\n【2. 月次累積分析シート】');
+    const monthlySheet = ss.getSheetByName('月次累積分析');
+    if (monthlySheet) {
+      const monthlyData = monthlySheet.getDataRange().getValues();
+      const monthlyHeaders = monthlyData[0];
+      Logger.log(`ヘッダー: [${monthlyHeaders.join(', ')}]`);
+      Logger.log(`データ行数: ${monthlyData.length - 1}行`);
+      
+      // 最新行をチェック
+      if (monthlyData.length > 1) {
+        const lastRow = monthlyData[monthlyData.length - 1];
+        Logger.log(`最終行（生データ）:`);
+        lastRow.forEach((cell, index) => {
+          const cellType = typeof cell;
+          const cellValue = cell;
+          Logger.log(`  列${index}（${monthlyHeaders[index]}）: ${cellValue} (型: ${cellType})`);
+        });
+      }
+    }
+    
+    // 3. 商品マスターシート
+    Logger.log('\n【3. 商品マスターシート】');
+    const productSheet = ss.getSheetByName('商品マスター');
+    if (productSheet) {
+      const productData = productSheet.getDataRange().getValues();
+      const productHeaders = productData[0];
+      Logger.log(`ヘッダー: [${productHeaders.join(', ')}]`);
+      Logger.log(`データ行数: ${productData.length - 1}行`);
+      
+      // サンプル行をチェック
+      if (productData.length > 1) {
+        const sampleRow = productData[1];
+        Logger.log(`サンプル行（2行目）:`);
+        sampleRow.forEach((cell, index) => {
+          const cellType = typeof cell;
+          const cellValue = cell;
+          Logger.log(`  列${index}（${productHeaders[index]}）: ${cellValue} (型: ${cellType})`);
+        });
+      }
+    }
+    
+    // 4. MQ分析シート
+    Logger.log('\n【4. MQ分析シート】');
+    const mqSheet = ss.getSheetByName('MQ分析');
+    if (mqSheet) {
+      const mqData = mqSheet.getDataRange().getValues();
+      const mqHeaders = mqData[0];
+      Logger.log(`ヘッダー: [${mqHeaders.join(', ')}]`);
+      Logger.log(`データ行数: ${mqData.length - 1}行`);
+      
+      // 最新行をチェック
+      if (mqData.length > 1) {
+        const lastRow = mqData[mqData.length - 1];
+        Logger.log(`最終行（生データ）:`);
+        lastRow.forEach((cell, index) => {
+          const cellType = typeof cell;
+          const cellValue = cell;
+          Logger.log(`  列${index}（${mqHeaders[index]}）: ${cellValue} (型: ${cellType})`);
+        });
+      }
+    }
+    
+    Logger.log('\n=== 診断完了 ===');
+    
+  } catch (error) {
+    Logger.log('❌ 診断エラー: ' + error.message);
+    Logger.log('スタックトレース: ' + error.stack);
+  }
+}
+
+/**
+ * MQ会計システムの商品マスター参照箇所を診断
+ */
+function diagnoseProductMasterUsage() {
+  console.log('=== 商品マスター参照箇所の診断 ===');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  
+  // 1. 商品マスターの構造確認
+  console.log('\n【商品マスターの構造】');
+  const pmHeaders = pmSheet.getRange(1, 1, 1, pmSheet.getLastColumn()).getValues()[0];
+  console.log('ヘッダー:', pmHeaders);
+  console.log('列インデックス:');
+  pmHeaders.forEach((h, i) => {
+    console.log(`  ${i}: ${h}`);
+  });
+  
+  // 2. MQ分析シートのV(変動費)列を確認
+  console.log('\n【MQ分析シートのV(変動費)列】');
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  const mqHeaders = mqSheet.getRange(1, 1, 1, mqSheet.getLastColumn()).getValues()[0];
+  const colV = mqHeaders.indexOf('V(変動費)');
+  console.log(`V(変動費)列のインデックス: ${colV}`);
+  
+  // 最新5行のV(変動費)の値を確認
+  const lastRow = mqSheet.getLastRow();
+  const startRow = Math.max(2, lastRow - 4);
+  const vValues = mqSheet.getRange(startRow, colV + 1, lastRow - startRow + 1, 1).getValues();
+  console.log(`最新5行のV(変動費)の値:`);
+  vValues.forEach((v, i) => {
+    console.log(`  行${startRow + i}: ${v[0]} (型: ${typeof v[0]})`);
+  });
+  
+  // 3. V(変動費)列の数式を確認
+  console.log('\n【V(変動費)列の数式】');
+  const vFormulas = mqSheet.getRange(startRow, colV + 1, lastRow - startRow + 1, 1).getFormulas();
+  console.log(`最新5行のV(変動費)の数式:`);
+  vFormulas.forEach((f, i) => {
+    console.log(`  行${startRow + i}: ${f[0] || '(値のみ、数式なし)'}`);
+  });
+  
+  console.log('\n=== 診断完了 ===');
+}
+
+/**
+ * MQ分析シートの構造を詳細診断
+ */
+function diagnoseMQAnalysisStructure() {
+  console.log('=== MQ分析シート構造の詳細診断 ===');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  
+  if (!mqSheet) {
+    console.error('❌ MQ分析シートが見つかりません');
+    return;
+  }
+  
+  // 1. ヘッダー行を確認
+  console.log('\n【ヘッダー情報】');
+  const lastCol = mqSheet.getLastColumn();
+  const headers = mqSheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  
+  console.log(`列数: ${lastCol}`);
+  console.log('ヘッダー:', headers);
+  console.log('\n列インデックス:');
+  headers.forEach((h, i) => {
+    console.log(`  ${i}: "${h}"`);
+  });
+  
+  // 2. 最終行のデータを確認
+  console.log('\n【最終行のデータ】');
+  const lastRow = mqSheet.getLastRow();
+  console.log(`データ行数: ${lastRow - 1}行`);
+  
+  if (lastRow > 1) {
+    const lastRowData = mqSheet.getRange(lastRow, 1, 1, lastCol).getValues()[0];
+    console.log('最終行の値:');
+    lastRowData.forEach((val, i) => {
+      console.log(`  列${i}(${headers[i]}): ${val} (型: ${typeof val})`);
+    });
+  }
+  
+  // 3. 最終5行のサンプルデータを確認
+  console.log('\n【最終5行のサンプルデータ】');
+  const startRow = Math.max(2, lastRow - 4);
+  const sampleData = mqSheet.getRange(startRow, 1, lastRow - startRow + 1, lastCol).getValues();
+  
+  sampleData.forEach((row, i) => {
+    console.log(`\n行${startRow + i}:`);
+    row.forEach((val, j) => {
+      if (String(val).includes('#NUM!')) {
+        console.log(`  列${j}(${headers[j]}): #NUM!エラー`);
+      } else if (val !== '') {
+        console.log(`  列${j}(${headers[j]}): ${val}`);
+      }
+    });
+  });
+  
+  // 4. V列またはV(変動費)列の存在を確認
+  console.log('\n【変動費列の検索】');
+  const vColumns = [];
+  headers.forEach((h, i) => {
+    if (String(h).includes('V') || String(h).includes('変動費')) {
+      vColumns.push({ index: i, name: h });
+    }
+  });
+  
+  if (vColumns.length > 0) {
+    console.log('変動費関連の列:');
+    vColumns.forEach(col => {
+      console.log(`  列${col.index}: "${col.name}"`);
+    });
+  } else {
+    console.log('⚠️ 変動費関連の列が見つかりません');
+  }
+  
+  // 5. 数式を確認
+  console.log('\n【最終行の数式】');
+  if (lastRow > 1) {
+    const formulas = mqSheet.getRange(lastRow, 1, 1, lastCol).getFormulas()[0];
+    formulas.forEach((f, i) => {
+      if (f) {
+        console.log(`  列${i}(${headers[i]}): ${f}`);
+      }
+    });
+  }
+  
+  console.log('\n=== 診断完了 ===');
+}
+
+/**
+ * 増分処理の商品マスター参照部分を診断
+ */
+function diagnoseIncrementalMQDataFunction() {
+  console.log('=== 増分処理関数の診断 ===');
+  
+  // processIncrementalMQData関数のソースコードを取得
+  const functionCode = processIncrementalMQData.toString();
+  
+  console.log('\n【商品マスター参照部分の検索】');
+  
+  // 商品マスターの列名参照を検索
+  const patterns = [
+    /indexOf\(['"]原価['"]\)/g,
+    /indexOf\(['"]V\(原価\)['"]\)/g,
+    /indexOf\(['"]V['"]\)/g,
+    /indexOf\(['"]変動費['"]\)/g,
+    /商品マスター/g,
+    /PRODUCT_MASTER/g
+  ];
+  
+  patterns.forEach(pattern => {
+    const matches = functionCode.match(pattern);
+    if (matches) {
+      console.log(`パターン "${pattern}" が ${matches.length}箇所見つかりました`);
+      console.log('一致:', matches);
+    }
+  });
+  
+  console.log('\n=== 診断完了 ===');
+  console.log('※ 関数全体を確認する必要がある場合は、Apps Scriptエディタで processIncrementalMQData を検索してください');
+}
+
+/**
+ * MQ会計システムの全関数を調査
+ */
+function listAllMQFunctions() {
+  console.log('=== Apps Script内の全関数一覧 ===\n');
+  
+  // グローバルスコープの全関数を取得
+  const globalThis = this;
+  const functionNames = [];
+  
+  for (const key in globalThis) {
+    if (typeof globalThis[key] === 'function') {
+      functionNames.push(key);
+    }
+  }
+  
+  console.log(`合計関数数: ${functionNames.length}\n`);
+  
+  // MQ関連の関数を抽出
+  console.log('【MQ関連の関数】');
+  const mqFunctions = functionNames.filter(name => 
+    name.toLowerCase().includes('mq') || 
+    name.toLowerCase().includes('incremental') ||
+    name.toLowerCase().includes('process')
+  );
+  
+  mqFunctions.forEach(name => {
+    console.log(`  - ${name}`);
+  });
+  
+  // 在庫関連の関数を抽出
+  console.log('\n【在庫関連の関数】');
+  const inventoryFunctions = functionNames.filter(name => 
+    name.toLowerCase().includes('inventory') ||
+    name.toLowerCase().includes('在庫')
+  );
+  
+  inventoryFunctions.forEach(name => {
+    console.log(`  - ${name}`);
+  });
+  
+  // データ処理関連の関数を抽出
+  console.log('\n【データ処理関連の関数】');
+  const dataFunctions = functionNames.filter(name => 
+    name.toLowerCase().includes('process') ||
+    name.toLowerCase().includes('load') ||
+    name.toLowerCase().includes('consolidate')
+  );
+  
+  dataFunctions.forEach(name => {
+    console.log(`  - ${name}`);
+  });
+  
+  console.log('\n=== 調査完了 ===');
+}
+
+
+/**
+ * MQ_CONFIGの内容を確認
+ */
+function inspectMQConfig() {
+  console.log('=== MQ_CONFIG 設定内容 ===\n');
+  
+  console.log('【スプレッドシートID】');
+  console.log(`  ${MQ_CONFIG.SPREADSHEET_ID}\n`);
+  
+  console.log('【シート名設定】');
+  for (const key in MQ_CONFIG.SHEETS) {
+    console.log(`  ${key}: "${MQ_CONFIG.SHEETS[key]}"`);
+  }
+  
+  console.log('\n【その他の設定】');
+  for (const key in MQ_CONFIG) {
+    if (key !== 'SPREADSHEET_ID' && key !== 'SHEETS') {
+      console.log(`  ${key}: ${MQ_CONFIG[key]}`);
+    }
+  }
+  
+  console.log('\n=== 確認完了 ===');
+}
+
+/**
+ * MQ分析シートの#NUM!エラーを直接修復（関数名不要版）
+ */
+function repairMQAnalysisDataDirect() {
+  console.log('=== MQ分析シート直接修復開始 ===');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. 商品マスターを読み込み
+  console.log('📊 商品マスター読込...');
+  const pmSheet = ss.getSheetByName('商品マスター');
+  
+  if (!pmSheet) {
+    console.error('❌ 商品マスターシートが見つかりません');
+    return;
+  }
+  
+  const pmData = pmSheet.getDataRange().getValues();
+  const pmHeaders = pmData[0];
+  
+  const colPmCode = pmHeaders.indexOf('商品コード');
+  const colPmCost = pmHeaders.indexOf('V(原価)');
+  
+  console.log(`商品マスター列: 商品コード=${colPmCode}, V(原価)=${colPmCost}`);
+  
+  const productMaster = {};
+  for (let i = 1; i < pmData.length; i++) {
+    const code = String(pmData[i][colPmCode]).trim();
+    const cost = Number(pmData[i][colPmCost]);
+    if (code && !isNaN(cost) && cost > 0) {
+      productMaster[code] = cost;
+    }
+  }
+  
+  console.log(`✅ 商品マスター: ${Object.keys(productMaster).length}商品`);
+  
+  // 2. MQ分析シートを読み込み
+  console.log('\n📊 MQ分析シート読込...');
+  const mqSheet = ss.getSheetByName('MQ分析');
+  
+  if (!mqSheet) {
+    console.error('❌ MQ分析シートが見つかりません');
+    return;
+  }
+  
+  const mqData = mqSheet.getDataRange().getValues();
+  const mqHeaders = mqData[0];
+  
+  const colCode = mqHeaders.indexOf('商品コード');
+  const colQuantity = mqHeaders.indexOf('Q(販売数量)');
+  const colSales = mqHeaders.indexOf('P（売上金額）');
+  const colVariableCost = mqHeaders.indexOf('V（変動費）');
+  const colMQ = mqHeaders.indexOf('MQ');
+  
+  console.log(`MQ分析列: 商品コード=${colCode}, Q=${colQuantity}, P=${colSales}, V=${colVariableCost}, MQ=${colMQ}`);
+  console.log(`📊 MQ分析データ: ${mqData.length - 1}行`);
+  
+  // 3. #NUM!エラーをカウント
+  let errorCount = 0;
+  for (let i = 1; i < mqData.length; i++) {
+    const vValue = String(mqData[i][colVariableCost]);
+    if (vValue.includes('#NUM!')) {
+      errorCount++;
+    }
+  }
+  
+  console.log(`\n🔍 #NUM!エラー: ${errorCount}行`);
+  
+  if (errorCount === 0) {
+    console.log('✅ 修復が必要なデータはありません');
+    console.log('=== 修復完了 ===');
+    return;
+  }
+  
+  // 4. #NUM!エラーを修復（バッチ処理）
+  console.log(`\n🔧 修復開始...`);
+  
+  const batchSize = 100; // 100行ずつ処理
+  let repairedCount = 0;
+  let notFoundCount = 0;
+  
+  for (let startRow = 1; startRow < mqData.length; startRow += batchSize) {
+    const endRow = Math.min(startRow + batchSize, mqData.length);
+    const batchData = [];
+    
+    for (let i = startRow; i < endRow; i++) {
+      const row = mqData[i];
+      const vValue = String(row[colVariableCost]);
+      
+      // #NUM!エラーがある場合のみ修復
+      if (vValue.includes('#NUM!')) {
+        const code = String(row[colCode]).trim();
+        const quantity = Number(row[colQuantity]) || 0;
+        const sales = Number(row[colSales]) || 0;
+        
+        const cost = productMaster[code];
+        
+        if (cost) {
+          const variableCost = quantity * cost;
+          const mq = sales - variableCost;
+          
+          batchData.push({
+            row: i + 1,
+            variableCost: variableCost,
+            mq: mq
+          });
+          
+          repairedCount++;
+        } else {
+          notFoundCount++;
+          console.warn(`⚠️ 商品マスターに未登録: ${code} (行${i + 1})`);
+        }
+      }
+    }
+    
+    // バッチ更新
+    if (batchData.length > 0) {
+      batchData.forEach(update => {
+        mqSheet.getRange(update.row, colVariableCost + 1).setValue(update.variableCost);
+        mqSheet.getRange(update.row, colMQ + 1).setValue(update.mq);
+      });
+      
+      console.log(`  処理済み: ${startRow}〜${endRow}行 (修復: ${batchData.length}件)`);
+    }
+  }
+  
+  console.log(`\n✅ 修復完了: ${repairedCount}行`);
+  if (notFoundCount > 0) {
+    console.log(`⚠️ 商品マスター未登録: ${notFoundCount}行（これらは修復できませんでした）`);
+  }
+  
+  console.log('\n=== MQ分析シート修復完了 ===');
+  console.log('次のステップ: メニューから「集計シート再計算」を実行してください');
+}
+
+/**
+ * 増分処理関連の関数内容を診断
+ */
+function diagnoseIncrementalFunctions() {
+  console.log('=== 増分処理関連関数の診断 ===\n');
+  
+  // 1. integrateNextEngineIncremental
+  console.log('【integrateNextEngineIncremental】');
+  const neFunction = integrateNextEngineIncremental.toString();
+  
+  if (neFunction.includes('原価')) {
+    console.log('✓ "原価"という文字列が含まれています');
+    const lines = neFunction.split('\n');
+    lines.forEach((line, i) => {
+      if (line.includes('原価')) {
+        console.log(`  行${i}: ${line.trim()}`);
+      }
+    });
+  }
+  
+  if (neFunction.includes('V(原価)')) {
+    console.log('✓ "V(原価)"という文字列が含まれています');
+  }
+  
+  console.log('');
+  
+  // 2. integrateAmazonIncremental
+  console.log('【integrateAmazonIncremental】');
+  const amazonFunction = integrateAmazonIncremental.toString();
+  
+  if (amazonFunction.includes('原価')) {
+    console.log('✓ "原価"という文字列が含まれています');
+    const lines = amazonFunction.split('\n');
+    lines.forEach((line, i) => {
+      if (line.includes('原価')) {
+        console.log(`  行${i}: ${line.trim()}`);
+      }
+    });
+  }
+  
+  if (amazonFunction.includes('V(原価)')) {
+    console.log('✓ "V(原価)"という文字列が含まれています');
+  }
+  
+  console.log('\n=== 診断完了 ===');
+}
+
+/**
+ * 統合売上データとMQ分析の#NUM!を一括修復
+ */
+function repairAllDataSheets() {
+  console.log('=== 全データシート一括修復開始 ===');
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+  
+  // 1. 商品マスターを読み込み
+  console.log('\n📊 商品マスター読込...');
+  const pmData = pmSheet.getDataRange().getValues();
+  const pmHeaders = pmData[0];
+  
+  const colPmCode = pmHeaders.indexOf('商品コード');
+  const colPmCost = pmHeaders.indexOf('V(原価)');
+  
+  const productMaster = {};
+  for (let i = 1; i < pmData.length; i++) {
+    const code = String(pmData[i][colPmCode]).trim();
+    const cost = Number(pmData[i][colPmCost]);
+    if (code && !isNaN(cost) && cost > 0) {
+      productMaster[code] = cost;
+    }
+  }
+  
+  console.log(`✅ 商品マスター: ${Object.keys(productMaster).length}商品`);
+  
+  // 2. 統合売上データを修復
+  console.log('\n【統合売上データの修復】');
+  const consolidatedSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INTEGRATED_SALES);
+  const consolidatedData = consolidatedSheet.getDataRange().getValues();
+  const consolidatedHeaders = consolidatedData[0];
+  
+  const colConsCode = consolidatedHeaders.indexOf('商品コード');
+  const colConsQuantity = consolidatedHeaders.indexOf('Q(販売数量)');
+  const colConsVariableCost = consolidatedHeaders.indexOf('V(変動費)');
+  
+  let consolidatedRepaired = 0;
+  
+  for (let i = 1; i < consolidatedData.length; i++) {
+    const row = consolidatedData[i];
+    const vValue = String(row[colConsVariableCost]);
+    
+    if (vValue.includes('#NUM!')) {
+      const code = String(row[colConsCode]).trim();
+      const quantity = Number(row[colConsQuantity]) || 0;
+      const cost = productMaster[code];
+      
+      if (cost) {
+        const variableCost = quantity * cost;
+        consolidatedSheet.getRange(i + 1, colConsVariableCost + 1).setValue(variableCost);
+        consolidatedRepaired++;
+      }
+    }
+  }
+  
+  console.log(`✅ 統合売上データ修復: ${consolidatedRepaired}行`);
+  
+  // 3. MQ分析シートを修復
+  console.log('\n【MQ分析シートの修復】');
+  const mqSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.MQ_ANALYSIS);
+  const mqData = mqSheet.getDataRange().getValues();
+  const mqHeaders = mqData[0];
+  
+  const colMqCode = mqHeaders.indexOf('商品コード');
+  const colMqQuantity = mqHeaders.indexOf('Q(販売数量)');
+  const colMqSales = mqHeaders.indexOf('P（売上金額）');
+  const colMqVariableCost = mqHeaders.indexOf('V（変動費）');
+  const colMqMQ = mqHeaders.indexOf('MQ');
+  
+  let mqRepaired = 0;
+  
+  for (let i = 1; i < mqData.length; i++) {
+    const row = mqData[i];
+    const vValue = String(row[colMqVariableCost]);
+    
+    if (vValue.includes('#NUM!')) {
+      const code = String(row[colMqCode]).trim();
+      const quantity = Number(row[colMqQuantity]) || 0;
+      const sales = Number(row[colMqSales]) || 0;
+      const cost = productMaster[code];
+      
+      if (cost) {
+        const variableCost = quantity * cost;
+        const mq = sales - variableCost;
+        
+        mqSheet.getRange(i + 1, colMqVariableCost + 1).setValue(variableCost);
+        mqSheet.getRange(i + 1, colMqMQ + 1).setValue(mq);
+        mqRepaired++;
+      }
+    }
+  }
+  
+  console.log(`✅ MQ分析シート修復: ${mqRepaired}行`);
+  
+  console.log('\n=== 全データシート修復完了 ===');
+  console.log(`合計修復: 統合売上${consolidatedRepaired}行 + MQ分析${mqRepaired}行`);
+  console.log('\n次のステップ: 集計シート再計算を実行してください');
+}
+
+function diagnoseIntegratedSalesDuplication() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const values = sh.getDataRange().getValues();
+  Logger.log(`行数(ヘッダー含む): ${values.length}`);
+
+  // 0:日付 1:商品コード 2:商品名 3:Q 4:P 5:V 6:データソース
+  const dateIdx=0, codeIdx=1, qtyIdx=3, pIdx=4, vIdx=5, srcIdx=6;
+
+  const keyCount = new Map();
+  const ymSumBySrc = {}; // ym -> src -> sumP
+  let valid = 0;
+
+  for (let i=1; i<values.length; i++) {
+    const r = values[i];
+    const date = r[dateIdx];
+    if (!date) continue;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d.getTime())) continue;
+
+    const ym = Utilities.formatDate(d, 'JST', 'yyyy/MM');
+    const code = String(r[codeIdx] || '').trim();
+    const src = String(r[srcIdx] || '').trim();
+    const qty = (typeof r[qtyIdx]==='number') ? r[qtyIdx] : Number(r[qtyIdx]) || 0;
+    const p   = (typeof r[pIdx]==='number')   ? r[pIdx]   : Number(r[pIdx])   || 0;
+    const v   = (typeof r[vIdx]==='number')   ? r[vIdx]   : Number(r[vIdx])   || 0;
+
+    // 重複判定キー（近似）
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const key = `${dateKey}|${code}|${src}|${qty}|${p}|${v}`;
+
+    keyCount.set(key, (keyCount.get(key) || 0) + 1);
+
+    if (!ymSumBySrc[ym]) ymSumBySrc[ym] = {};
+    ymSumBySrc[ym][src] = (ymSumBySrc[ym][src] || 0) + p;
+
+    valid++;
+  }
+
+  let dupKeys = 0;
+  let dupRows = 0;
+  let maxDup = 0;
+
+  for (const [k,c] of keyCount.entries()) {
+    if (c > 1) {
+      dupKeys++;
+      dupRows += (c - 1);
+      if (c > maxDup) maxDup = c;
+    }
+  }
+
+  Logger.log(`有効明細行: ${valid}`);
+  Logger.log(`重複キー数: ${dupKeys}`);
+  Logger.log(`重複“余剰”行数(=削除候補): ${dupRows}`);
+  Logger.log(`最大重複回数(同一キー): ${maxDup}`);
+
+  // 2025/11 のソース別合計を出す（必要なら他月も同様に見れる）
+  const targetYm = '2025/11';
+  if (ymSumBySrc[targetYm]) {
+    Logger.log(`--- ${targetYm} ソース別P合計 ---`);
+    Object.keys(ymSumBySrc[targetYm]).sort().forEach(src => {
+      Logger.log(`${src}: ${Math.round(ymSumBySrc[targetYm][src])}`);
+    });
+  } else {
+    Logger.log(`${targetYm} のデータが見つかりません`);
+  }
+}
+
+function backupIntegratedSalesSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const name = `統合売上データ_BACKUP_${Utilities.formatDate(new Date(), 'JST', 'yyyyMMdd_HHmmss')}`;
+  sh.copyTo(ss).setName(name);
+  Logger.log(`✅ バックアップ作成: ${name}`);
+}
+
+function backupIntegratedSalesSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const name = `統合売上データ_BACKUP_${Utilities.formatDate(new Date(), 'JST', 'yyyyMMdd_HHmmss')}`;
+  sh.copyTo(ss).setName(name);
+  Logger.log(`✅ バックアップ作成: ${name}`);
+}
+
+function dedupeIntegratedSales() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const values = sh.getDataRange().getValues();
+  if (values.length <= 1) return;
+
+  const header = values[0];
+  const dateIdx=0, codeIdx=1, qtyIdx=3, pIdx=4, vIdx=5, srcIdx=6;
+
+  const seen = new Set();
+  const out = [header];
+
+  let removed = 0;
+
+  for (let i=1; i<values.length; i++) {
+    const r = values[i];
+    const date = r[dateIdx];
+    if (!date) continue;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d.getTime())) continue;
+
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const code = String(r[codeIdx] || '').trim();
+    const src = String(r[srcIdx] || '').trim();
+    const qty = (typeof r[qtyIdx]==='number') ? r[qtyIdx] : Number(r[qtyIdx]) || 0;
+    const p   = (typeof r[pIdx]==='number')   ? r[pIdx]   : Number(r[pIdx])   || 0;
+    const v   = (typeof r[vIdx]==='number')   ? r[vIdx]   : Number(r[vIdx])   || 0;
+
+    const key = `${dateKey}|${code}|${src}|${qty}|${p}|${v}`;
+    if (seen.has(key)) {
+      removed++;
+      continue;
+    }
+    seen.add(key);
+    out.push(r);
+  }
+
+  sh.clearContents();
+  sh.getRange(1, 1, out.length, out[0].length).setValues(out);
+
+  Logger.log(`✅ 重複排除完了: 削除=${removed} / 出力行(ヘッダー含)=${out.length}`);
+}
+
+function diagnoseMonthlyFixedCostKeys() {
+  const fixedCostData = loadMonthlyFixedCost();
+  const keys = Object.keys(fixedCostData).sort();
+  Logger.log(`fixedCostData keys sample: ${keys.slice(0, 20).join(', ')}`);
+  Logger.log(`2025/11 = ${fixedCostData['2025/11']}`);
+  Logger.log(`2025/12 = ${fixedCostData['2025/12']}`);
+  Logger.log(`2026/01 = ${fixedCostData['2026/01']}`);
+}
+
+function buildExistingIntegratedSalesKeySet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const values = sh.getDataRange().getValues();
+  const seen = new Set();
+  if (values.length <= 1) return seen;
+
+  // 列: 0日付,1商品コード,3Q,4P,5V,6データソース（あなたの統合売上データ仕様）
+  for (let i = 1; i < values.length; i++) {
+    const r = values[i];
+    const date = r[0];
+    if (!date) continue;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d.getTime())) continue;
+
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const code = String(r[1] || '').trim();
+    const qty = Number(r[3]) || 0;
+    const p   = Number(r[4]) || 0;
+    const v   = Number(r[5]) || 0;
+    const src = String(r[6] || '').trim();
+
+    const key = `${dateKey}|${code}|${src}|${qty}|${p}|${v}`;
+    seen.add(key);
+  }
+  return seen;
+}
+
+function dedupeIntegratedSalesSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName('統合売上データ');
+  if (!sh) throw new Error('統合売上データが見つかりません');
+
+  const values = sh.getDataRange().getValues();
+  if (values.length <= 1) {
+    Logger.log('⚠️ データがありません');
+    return;
+  }
+
+  const header = values[0];
+
+  // 列: 0日付,1商品コード,2商品名,3Q,4P,5V,6データソース（あなたの構成）
+  const seen = new Set();
+  const out = [header];
+
+  let removed = 0;
+  let kept = 0;
+
+  for (let i = 1; i < values.length; i++) {
+    const r = values[i];
+
+    const date = r[0];
+    const code = String(r[1] || '').trim();
+    const name = r[2]; // そのまま保持
+    const qty  = Number(r[3]) || 0;
+    const p    = Number(r[4]) || 0;
+    const v    = Number(r[5]) || 0;
+    const src  = String(r[6] || '').trim();
+
+    if (!date || !code || !src) continue;
+
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d.getTime())) continue;
+
+    const dateKey = Utilities.formatDate(d, 'JST', 'yyyy-MM-dd');
+    const key = `${dateKey}|${code}|${src}|${qty}|${p}|${v}`;
+
+    if (seen.has(key)) {
+      removed++;
+      continue;
+    }
+    seen.add(key);
+    out.push([date, code, name, qty, p, v, src]);
+    kept++;
+  }
+
+  sh.clearContents();
+  sh.getRange(1, 1, out.length, out[0].length).setValues(out);
+
+  Logger.log(`✅ dedupe完了: 残=${kept}行 / 削除=${removed}行（ヘッダー除く）`);
+}
+
+/**
+ * 月次在庫金額を計算（原価から各商品の在庫金額と合計を計算）
+ */
+function calculateMonthlyInventoryAmount() {
+  try {
+    const startTime = Date.now();
+    Logger.log('=== 統合在庫データ（計測日・商品コード・在庫数）から集計開始 ===');
+
+    // UIが使えないコンテキスト（トリガー等）でも通知できるようにするユーティリティ
+    function notify(message, title) {
+      try {
+        SpreadsheetApp.getUi().alert(message);
+      } catch (e) {
+        try {
+          SpreadsheetApp.getActiveSpreadsheet().toast(message, title || '通知', 10);
+        } catch (e2) {
+          Logger.log('通知失敗: ' + e2.message);
+        }
+      }
+    }
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const consSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_CONSOLIDATED);
+    if (!consSheet) throw new Error('統合在庫データシートが見つかりません。');
+
+    const data = consSheet.getDataRange().getValues();
+    if (data.length <= 1) throw new Error('統合在庫データに集計対象のデータがありません。');
+
+    const headers = data[0];
+    const colDate = headers.indexOf('計測日');
+    const colCode = headers.indexOf('商品コード');
+    const colName = headers.indexOf('商品名');
+    const colQty = headers.indexOf('在庫数');
+    let colAmount = headers.indexOf('在庫金額');
+
+    if (colDate < 0 || colCode < 0 || colQty < 0) {
+      throw new Error('統合在庫データの列構成が不正です。少なくとも「計測日」「商品コード」「在庫数」が必要です。');
+    }
+
+    // 商品マスターから原価を読込
+    const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+    const costMap = {};
+    if (pmSheet) {
+      const pm = pmSheet.getDataRange().getValues();
+      const ph = pm[0] || [];
+      const cCode = ph.indexOf('商品コード');
+      const cCost = ph.indexOf('V(原価)');
+      if (cCode >= 0 && cCost >= 0) {
+        for (let i = 1; i < pm.length; i++) {
+          const code = String(pm[i][cCode] || '').trim();
+          let cost = pm[i][cCost] || 0;
+          if (typeof cost === 'string') cost = Number(cost.replace(/¥|,/g, '')) || 0;
+          else cost = Number(cost) || 0;
+          if (code) costMap[code] = cost;
+        }
+      }
+    }
+
+    const productTotals = {}; // code -> { productName, totalQty, totalAmount }
+    const monthTotals = {}; // yyyy-MM -> totalAmount
+    let grandTotal = 0;
+
+    // 在庫金額列がなければヘッダーに追加（シート上）
+    if (colAmount < 0) {
+      colAmount = headers.length; // 新しい列インデックス（0-based）
+      consSheet.getRange(1, colAmount + 1).setValue('在庫金額');
+    }
+
+    const amountsToWrite = [];
+
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      const date = row[colDate];
+      const code = String(row[colCode] || '').trim();
+      const name = (colName >= 0) ? row[colName] : '';
+      const qty = Number(row[colQty]) || 0;
+
+      if (!code) {
+        amountsToWrite.push(['']);
+        continue;
+      }
+      if (!date) {
+        amountsToWrite.push(['']);
+        continue;
+      }
+
+      const dObj = (date instanceof Date) ? date : new Date(date);
+      if (isNaN(dObj.getTime())) {
+        amountsToWrite.push(['']);
+        continue;
+      }
+      const ym = Utilities.formatDate(dObj, Session.getScriptTimeZone(), 'yyyy-MM');
+
+      const unit = costMap[code] || 0;
+      const amount = qty * unit;
+
+      // 行ごとの在庫金額を配列に保持
+      amountsToWrite.push([amount]);
+
+      if (!productTotals[code]) productTotals[code] = { productName: name || code, totalQty: 0, totalAmount: 0 };
+      productTotals[code].totalQty += qty;
+      productTotals[code].totalAmount += amount;
+
+      if (!monthTotals[ym]) monthTotals[ym] = 0;
+      monthTotals[ym] += amount;
+
+      grandTotal += amount;
+    }
+
+    // 在庫金額を統合在庫データシートに書き込む
+    if (amountsToWrite.length > 0) {
+      consSheet.getRange(2, colAmount + 1, amountsToWrite.length, 1).setValues(amountsToWrite);
+      consSheet.getRange(2, colAmount + 1, amountsToWrite.length, 1).setNumberFormat('#,##0');
+    }
+
+    // 出力
+    const outName = MQ_CONFIG.SHEETS.INVENTORY_CONSOLIDATED + '集計';
+    let out = ss.getSheetByName(outName);
+    if (!out) out = ss.insertSheet(outName);
+    else out.clearContents();
+
+    const productHeader = ['商品コード', '商品名', '合計在庫数', '合計在庫金額'];
+    const prodRows = [productHeader];
+    const codes = Object.keys(productTotals).sort();
+    codes.forEach(code => {
+      const p = productTotals[code];
+      prodRows.push([code, p.productName, p.totalQty, p.totalAmount]);
+    });
+    prodRows.push(['', '', '総合計', grandTotal]);
+
+    const monthHeader = ['年月', '合計在庫金額'];
+    const monRows = [monthHeader];
+    const months = Object.keys(monthTotals).sort();
+    months.forEach(m => monRows.push([m, monthTotals[m]]));
+    monRows.push(['総合計', grandTotal]);
+
+    out.getRange(1, 1, prodRows.length, prodRows[0].length).setValues(prodRows);
+    const startMon = prodRows.length + 2;
+    out.getRange(startMon, 1, monRows.length, monRows[0].length).setValues(monRows);
+
+    out.setColumnWidth(1, 140);
+    out.setColumnWidth(2, 220);
+    out.setColumnWidth(3, 120);
+    out.setColumnWidth(4, 160);
+    out.getRange(2, 4, prodRows.length - 1, 1).setNumberFormat('#,##0');
+    out.getRange(startMon + 1, 2, monRows.length - 1, 1).setNumberFormat('#,##0');
+
+    notify(`✅ 統合在庫データの集計が完了しました。\n商品数: ${codes.length} 件\n集計月数: ${months.length} ヶ月\n在庫金額合計: ¥${Math.round(grandTotal).toLocaleString('ja-JP')}`, '集計完了');
+
+    Logger.log('✅ 統合在庫データの集計完了');
+  } catch (error) {
+    Logger.log(`❌ エラー: ${error.message}`);
+    notify(`エラーが発生しました:\n${error.message}`, 'エラー');
+  }
+}
+
+/**
+ * 月次在庫金額の詳細分析（商品別の日付別在庫推移）
+ */
+function analyzeMonthlyInventoryDetail() {
+  try {
+    const startTime = Date.now();
+    Logger.log('=== 月次在庫金額詳細分析開始 ===');
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    // 必要なシートを取得
+    const inventorySheet = ss.getSheetByName(MQ_CONFIG.SHEETS.INVENTORY_DATA);
+    const pmSheet = ss.getSheetByName(MQ_CONFIG.SHEETS.PRODUCT_MASTER);
+    
+    if (!inventorySheet || !pmSheet) {
+      throw new Error('在庫データまたは商品マスターシートが見つかりません。');
+    }
+    
+    // 商品マスターから原価を読み込み
+    const pmData = pmSheet.getDataRange().getValues();
+    const pmHeaders = pmData[0];
+    const colPmCode = pmHeaders.indexOf('商品コード');
+    const colPmCost = pmHeaders.indexOf('V(原価)');
+    
+    const costMap = {};
+    for (let i = 1; i < pmData.length; i++) {
+      const code = String(pmData[i][colPmCode]).trim();
+      let cost = pmData[i][colPmCost];
+      
+      if (typeof cost === 'string') {
+        cost = parseInt(cost.replace(/¥|,/g, ''), 10) || 0;
+      } else {
+        cost = Number(cost) || 0;
+      }
+      
+      if (code) {
+        costMap[code] = cost;
+      }
+    }
+    
+    // 在庫データを読み込み
+    const invData = inventorySheet.getDataRange().getValues();
+    const invHeaders = invData[0];
+    const colInvDate = invHeaders.indexOf('計測日');
+    const colInvCode = invHeaders.indexOf('商品コード');
+    const colInvName = invHeaders.indexOf('商品名');
+    const colInvQuantity = invHeaders.indexOf('在庫数');
+    
+    // 商品別の詳細データを集計
+    const productDetails = {}; // { '商品コード': [ {date, quantity, cost, amount}, ... ], ... }
+    
+    for (let i = 1; i < invData.length; i++) {
+      const row = invData[i];
+      const date = row[colInvDate];
+      const code = String(row[colInvCode]).trim();
+      const name = row[colInvName];
+      const quantity = Number(row[colInvQuantity]) || 0;
+      
+      if (!date || !code) continue;
+      
+      const dateObj = (date instanceof Date) ? date : new Date(date);
+      if (isNaN(dateObj.getTime())) continue;
+      
+      const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+      const cost = costMap[code] || 0;
+      const amount = quantity * cost;
+      
+      if (!productDetails[code]) {
+        productDetails[code] = {
+          productName: name,
+          cost: cost,
+          data: []
+        };
+      }
+      
+      productDetails[code].data.push({
+        date: dateStr,
+        quantity: quantity,
+        amount: amount
+      });
+    }
+    
+    // 分析結果シートを作成
+    let analysisSheet = ss.getSheetByName('在庫金額分析');
+    if (!analysisSheet) {
+      analysisSheet = ss.insertSheet('在庫金額分析');
+    } else {
+      analysisSheet.clearContents();
+    }
+    
+    const analysisData = [['商品コード', '商品名', '単価（原価）', '日付', '在庫数', '在庫金額']];
+    
+    const sortedCodes = Object.keys(productDetails).sort();
+    
+    sortedCodes.forEach(code => {
+      const product = productDetails[code];
+      const sortedData = product.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      sortedData.forEach((item, index) => {
+        analysisData.push([
+          index === 0 ? code : '',
+          index === 0 ? product.productName : '',
+          index === 0 ? product.unitCost : '',
+          item.date,
+          item.quantity,
+          item.amount
+        ]);
+      });
+    });
+    
+    // シートに書き込み
+    analysisSheet.getRange(1, 1, analysisData.length, analysisData[0].length).setValues(analysisData);
+    
+    // 列幅を設定
+    analysisSheet.setColumnWidth(1, 120);
+    analysisSheet.setColumnWidth(2, 150);
+    analysisSheet.setColumnWidth(3, 120);
+    analysisSheet.setColumnWidth(4, 100);
+    analysisSheet.setColumnWidth(5, 80);
+    analysisSheet.setColumnWidth(6, 120);
+    
+    // ヘッダーをフォーマット
+    const headerRange = analysisSheet.getRange(1, 1, 1, 6);
+    headerRange.setBackground('#70AD47');
+    headerRange.setFontColor('#FFFFFF');
+    headerRange.setFontWeight('bold');
+    
+    // 金額列をカンマ区切りで表示
+    analysisSheet.getRange(2, 3, analysisData.length - 1, 1).setNumberFormat('#,##0');
+    analysisSheet.getRange(2, 6, analysisData.length - 1, 1).setNumberFormat('#,##0');
+    
+    const elapsedTime = (Date.now() - startTime) / 1000;
+    Logger.log(`⏱️ 処理時間: ${elapsedTime.toFixed(2)}秒`);
+    
+    SpreadsheetApp.getUi().alert(
+      `✅ 月次在庫金額詳細分析が完了しました。\n\n` +
+      `分析商品数: ${sortedCodes.length}商品\n` +
+      `データ行数: ${analysisData.length - 1}行\n\n` +
+      `結果は「在庫金額分析」シートに出力されています。`
+    );
+    
+  } catch (error) {
+    Logger.log(`❌ エラー: ${error.message}`);
+    SpreadsheetApp.getUi().alert(`エラーが発生しました:\n${error.message}`);
+  }
+}
+
+// ======================================================================
+// 完全版 v5.0 終了
+// ======================================================================
